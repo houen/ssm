@@ -1,0 +1,51 @@
+#!/bin/bash
+# Author: Søren Houen
+# License: LGPL 3.0 https://www.gnu.org/licenses/lgpl-3.0.en.html
+
+LIB_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+SSM_DIR="$LIB_DIR/.."
+
+
+##### GPG keys #####
+file="$SSM_DIR/gpg_keys"
+if [ ! -f $file ]; then
+    echo "[ERROR] .ssm/gpg_keys file not found!"
+    exit 1
+fi
+
+sed -i -e '$a\' file
+gpg_keys=()
+start_line=1
+count=0
+while IFS= read -r line; do
+  if  [[ $line != \#* ]] ; then  
+    gpg_keys+=("$line")
+  fi
+  count=$count+1
+done < $file # Read lines from file
+
+
+##### Secret files #####
+file="$SSM_DIR/secret_files"
+if [ ! -f $file ]; then
+    echo "[ERROR] secret_files file not found!"
+    exit 1
+fi
+
+vi -escwq $file # Have Vi automatically add newline to end of file
+secret_files=()
+start_line=1
+count=0
+while IFS= read -r line; do
+  if  [[ $line != \#* ]] ; then
+    secret_files+=("$line")
+  fi
+done < $file # Read lines from file
+
+
+##### Importing public keys #####
+echo "[INFO] Importing public keys from .ssm/pubkeys:"
+for filename in "$SSM_DIR/pubkeys/*.pub"; do
+  [ -e "$filename" ] || continue
+  gpg -q --yes --import $filename
+done
