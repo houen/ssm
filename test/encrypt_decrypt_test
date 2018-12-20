@@ -1,0 +1,87 @@
+#!/bin/bash
+set -e
+
+# -------------------------
+#  Setup temporary test dir
+# -------------------------
+echo "[SETUP] Setting up temporary test dir"
+export SSM_TEST_KEY_NAME="XOXO_SSM_TEST_KEY_XOXO"
+SSM_TEST_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+TMP_TEST_DIR=$SSM_TEST_DIR/.test_ssm
+rm -Rf $TMP_TEST_DIR
+mkdir -p $TMP_TEST_DIR
+echo "[DONE]"
+echo ""
+
+# -------------------------
+#  Install ssm
+# -------------------------
+echo "[SETUP] Installing ssm as .test_ssm"
+cd $TMP_TEST_DIR
+current_branch=$(git rev-parse --abbrev-ref HEAD)
+git clone --single-branch --branch $current_branch --depth 1 -q -- git@github.com:houen/ssm.git $TMP_TEST_DIR && rm -Rf $TMP_TEST_DIR/.git
+echo "[DONE]"
+echo ""
+
+# -------------------------
+#  Generate and install temporary gpg key
+# -------------------------
+echo "[SETUP] Generating and installing temporary GPG key"
+# Delete old key if one already exists
+$SSM_TEST_DIR/bin/delete_test_gpg_key
+# Create new key
+gpg -q --yes --batch --quick-generate-key --passphrase '' $SSM_TEST_KEY_NAME
+echo "[DONE]"
+echo ""
+
+# -------------------------
+#  Setup test files
+# -------------------------
+echo "[SETUP] Creating file .secret"
+cd $TMP_TEST_DIR
+echo "Lorem ipsum dolor sit amet" > .secret
+echo "[SETUP] Adding .secret to secret_files"
+bin/add_secret_file ".secret"
+echo "[DONE]"
+echo ""
+
+# -------------------------
+#  Start test
+# -------------------------
+cd $TMP_TEST_DIR
+echo "[TEST] Importing test key to ssm"
+./bin/import_pubkey $SSM_TEST_KEY_NAME
+
+echo "[TEST] .. Encrypting secrets"
+./bin/encrypt_secrets
+echo "[TEST] .. Moving original .secret file to .secret.orig"
+mv .secret .secret.orig
+
+echo "[TEST] .. Decrypting secrets"
+bin/decrypt_secrets
+
+echo "[TEST] Comparing encrypted/decrypted file and orig file for equality:"
+if cmp -s ".secret.orig" ".secret" ; then
+   echo "[TEST] original file and encrypted/decrypted file match"
+   echo ""
+   echo "==============================="
+   echo "[PASS]"
+   echo "==============================="
+   echo ""
+else
+   echo ""
+   echo "==============================="
+   echo "[FAIL]"
+   echo "==============================="
+   echo ""
+   exit 1
+fi
+
+# -------------------------
+#  Cleanup
+# -------------------------
+echo "[CLEANUP] Removing test dir TMP_TEST_DIR"
+rm -Rf $TMP_TEST_DIR
+echo "[CLEANUP] Removing temporary gpg key"
+cd $SSM_TEST_DIR
+$SSM_TEST_DIR/bin/delete_test_gpg_key
