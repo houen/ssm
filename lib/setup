@@ -20,7 +20,17 @@ function require_file_presence {
   fi
 }
 
-##### GPG keys #####
+function import_public_keys {
+  echo "[INFO] Importing public keys from .ssm/pubkeys:"
+  for filename in "$SSM_DIR/pubkeys/*.pub"; do
+    [ -e "$filename" ] || continue
+    gpg -q --yes --import $filename
+  done
+}
+
+# -------------------------
+# Load GPG keys var
+# -------------------------
 file="$SSM_DIR/gpg_keys"
 if [ ! -f $file ]; then
     echo "[ERROR] .ssm/gpg_keys file not found!"
@@ -37,7 +47,9 @@ while IFS= read -r line; do
 done < $file # Read lines from file
 
 
-##### Secret files #####
+# -------------------------
+# Load secret files var
+# -------------------------
 file="$SSM_DIR/secret_files"
 if [ ! -f $file ]; then
     echo "[ERROR] secret_files file not found!"
@@ -52,12 +64,3 @@ while IFS= read -r line; do
     secret_files+=("$line")
   fi
 done < $file # Read lines from file
-
-
-function import_public_keys {
-  echo "[INFO] Importing public keys from .ssm/pubkeys:"
-  for filename in "$SSM_DIR/pubkeys/*.pub"; do
-    [ -e "$filename" ] || continue
-    gpg -q --yes --import $filename
-  done
-}
