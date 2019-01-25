@@ -26,15 +26,15 @@ git clone --depth 1 -q -- git@github.com:houen/ssm.git .ssm && rm -Rf .ssm/git
 #### Add your GPG key
 ```
 # Repeat for every team member GPG key
-bin/import_pubkey KEY_ID
+.ssm/bin/import_pubkey KEY_ID
 ```
 `KEY_ID` can be either the Key name, Key ID, or Key fingerprint
 
 #### Add the files you wish to have encrypted to .ssm/secret_files
 ```
 # Example:
-# echo ".env" >> .ssm/secret_files
-# echo "some_dir/secret" >> .ssm/secret_files
+.ssm/bin/add_secret_file .env
+.ssm/bin/add_secret_file some_dir/secret
 ```
 
 #### Add a line to your .gitignore to not ignore .ssm.gpg files
@@ -69,8 +69,7 @@ Now the secrets files will be added / overridden with the new values.
 
 #### Adding a new secret file
 - `cd` to your project folder
-- Add the new secret files path to the file `.ssm/secret_files` 
-  - This should be added as a single line with the path given relative to your project folder (where the .ssm directory is located)
+- run `.ssm/bin/add_secret_file FILE_NAME`
 - Then, from your project folder run `.ssm/bin/encrypt_secrets` and push to git.
 
 #### Adding a new developer who should be able to read the secret files
