@@ -50,7 +50,11 @@ echo "!*.ssm.gpg" >> .gitignore
 .ssm/bin/encrypt_secrets
 ```
 
-Done. You can now encrypt secrets with `.ssm/bin/encrypt_secrets`, and commit them to version control. Encrypted secrets can be decrypted with `.ssm/bin/decrypt_secrets` by any member of your team.
+Done! 
+
+Your secrets are now encrypted and stored with the ending .ssm.gpg. You can now commit the encrypted secrets to version control and push to your git repository. 
+
+Encrypted secrets can be decrypted with `.ssm/bin/decrypt_secrets` by any member of your team whose GPG keys were added above.
 
 ### Daily usage
 #### Encrypting secret files
@@ -80,6 +84,9 @@ Now the secrets files will be added / overridden with the new values.
 - Have them commit and push to git
 - Now, someone with access can pull the relevant git branch, e.g. DEV-42-onboard-soren, decrypt the secrets, run `.ssm/bin/encrypt_secrets`, then push to git.
 - Now the new developer can pull the branch, run .ssm/bin/decrypt_secrets, and they will have all the shared secrets.
+
+#### Removing a developer
+Remove their key ID from .ssm/gpg_keys, and remove their public key from .ssm/pubkeys. Secrets will no longer be encrypted with their GPG public key.
 
 ## FAQ
 - Can I encrypt certain files for only certain people / keys, for example .env.production?
