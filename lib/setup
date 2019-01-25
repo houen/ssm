@@ -13,7 +13,7 @@ if [ ! -f $file ]; then
     exit 1
 fi
 
-sed -i -e '$a\' file
+sed -i -e '$a\' $file # add newline to end of file
 gpg_keys=()
 start_line=1
 count=0
@@ -32,7 +32,7 @@ if [ ! -f $file ]; then
     exit 1
 fi
 
-vi -escwq $file # Have Vi automatically add newline to end of file
+sed -i -e '$a\' $file # add newline to end of file
 secret_files=()
 start_line=1
 count=0
