@@ -45,6 +45,8 @@ echo "!*.ssm.gpg" >> .gitignore
 #### Encrypt secrets
 ```
 # Will create a file.ssm.gpg file for each file listed in .ssm/secret_files
+# The files will be decryptable by all GPG keys listed in .ssm/gpg_keys
+
 .ssm/bin/encrypt_secrets
 ```
 
