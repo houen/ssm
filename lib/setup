@@ -5,6 +5,20 @@
 LIB_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 SSM_DIR="$LIB_DIR/.."
 
+function require_argument {
+  if [ -z $1 ]; then
+      echo "[ERROR] No argument given!"
+      exit 1
+  fi
+}
+
+function require_file_presence {
+  require_argument $1
+  if [ ! -f $1 ]; then
+    echo "[ERROR] File not found!"
+    exit 1
+  fi
+}
 
 ##### GPG keys #####
 file="$SSM_DIR/gpg_keys"
@@ -15,13 +29,11 @@ fi
 
 sed -i -e '$a\' $file # add newline to end of file
 gpg_keys=()
-start_line=1
-count=0
 while IFS= read -r line; do
+  # If line is not a comment (starts with #)
   if  [[ $line != \#* ]] ; then  
     gpg_keys+=("$line")
   fi
-  count=$count+1
 done < $file # Read lines from file
 
 
@@ -34,18 +46,18 @@ fi
 
 sed -i -e '$a\' $file # add newline to end of file
 secret_files=()
-start_line=1
-count=0
 while IFS= read -r line; do
+  # If line is not a comment (starts with #)
   if  [[ $line != \#* ]] ; then
     secret_files+=("$line")
   fi
 done < $file # Read lines from file
 
 
-##### Importing public keys #####
-echo "[INFO] Importing public keys from .ssm/pubkeys:"
-for filename in "$SSM_DIR/pubkeys/*.pub"; do
-  [ -e "$filename" ] || continue
-  gpg -q --yes --import $filename
-done
+function import_public_keys {
+  echo "[INFO] Importing public keys from .ssm/pubkeys:"
+  for filename in "$SSM_DIR/pubkeys/*.pub"; do
+    [ -e "$filename" ] || continue
+    gpg -q --yes --import $filename
+  done
+}
