@@ -11,7 +11,7 @@ if [ -z $keyid ]; then
     exit 1
 fi
 echo "[INFO] Importing key to pubkeys dir"
-cmd=gpg --armor --export --output "$PUBKEY_DIR/$keyid" $keyid
+cmd=gpg --output "$PUBKEY_DIR/$keyid" --armor --export $keyid
 echo $cmd
 exit
 
