@@ -14,14 +14,17 @@ rm -Rf $TMP_TEST_DIR
 mkdir -p $TMP_TEST_DIR
 echo "[DONE]"
 echo ""
+
 # -------------------------
 #  Install ssm
 # -------------------------
 echo "[SETUP] Installing ssm as .test_ssm"
 cd $TMP_TEST_DIR
-git clone --depth 1 -q -- git@github.com:houen/ssm.git $TMP_TEST_DIR && rm -Rf $TMP_TEST_DIR/.git
+current_branch=$(git rev-parse --abbrev-ref HEAD)
+git clone --single-branch --branch $current_branch --depth 1 -q -- git@github.com:houen/ssm.git $TMP_TEST_DIR && rm -Rf $TMP_TEST_DIR/.git
 echo "[DONE]"
 echo ""
+
 # -------------------------
 #  Generate and install temporary gpg key
 # -------------------------
@@ -32,6 +35,7 @@ $SSM_TEST_DIR/bin/delete_test_gpg_key
 gpg -q --yes --batch --quick-generate-key --passphrase '' $SSM_TEST_KEY_NAME
 echo "[DONE]"
 echo ""
+
 # -------------------------
 #  Setup test files
 # -------------------------
@@ -39,10 +43,10 @@ echo "[SETUP] Creating file .secret"
 cd $TMP_TEST_DIR
 echo "Lorem ipsum dolor sit amet" > .secret
 echo "[SETUP] Adding .secret to secret_files"
-$SSM_TEST_DIR/bin/add_secret_file
-# echo ".secret" >> $TMP_TEST_DIR/secret_files
+bin/add_secret_file ".secret"
 echo "[DONE]"
 echo ""
+
 # -------------------------
 #  Start test
 # -------------------------
