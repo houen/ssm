@@ -83,3 +83,6 @@ Now the secrets files will be added / overridden with the new values.
 ## FAQ
 - Can I encrypt certain files for only certain people / keys, for example .env.production?
   - This would be very useful indeed. However, I want to see if this proiject is useful for other people than myself before working on it. Please open a pull request if you have the time to implement this.
+
+## License
+Please see [LICENSE](https://github.com/houen/ssm/blob/master/LICENSE) for license details.
