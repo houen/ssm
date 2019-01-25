@@ -39,7 +39,7 @@ git clone --depth 1 -q -- git@github.com:houen/ssm.git .ssm && rm -Rf .ssm/git
 
 #### Add a line to your .gitignore to not ignore .ssm.gpg files
 ```
-echo "!*.ssm.gpg" > .gitignore
+echo "!*.ssm.gpg" >> .gitignore
 ```
 
 #### Encrypt secrets
