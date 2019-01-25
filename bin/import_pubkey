@@ -3,6 +3,9 @@
 # Get current dir (bin dir)
 BIN_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 SSM_DIR="$BIN_DIR/.."
+# Source setup support file
+source "$SSM_DIR/lib/setup"
+
 PUBKEY_DIR="$SSM_DIR/pubkeys"
 
 keyid=$1

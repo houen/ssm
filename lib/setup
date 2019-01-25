@@ -1,6 +1,4 @@
 #!/bin/bash
-# Author: Søren Houen
-# License: LGPL 3.0 https://www.gnu.org/licenses/lgpl-3.0.en.html
 
 LIB_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 SSM_DIR="$LIB_DIR/.."
