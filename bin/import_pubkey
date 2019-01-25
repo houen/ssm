@@ -4,7 +4,8 @@
 
 # Get current dir (bin dir)
 BIN_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-PUBKEY_DIR="$BIN_DIR/../pubkeys"
+SSM_DIR="$BIN_DIR/.."
+PUBKEY_DIR="$SSM_DIR/pubkeys"
 
 keyid=$1
 if [ -z $keyid ]; then

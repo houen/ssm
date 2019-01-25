@@ -39,7 +39,8 @@ echo "[SETUP] Creating file .secret"
 cd $TMP_TEST_DIR
 echo "Lorem ipsum dolor sit amet" > .secret
 echo "[SETUP] Adding .secret to secret_files"
-echo ".secret" >> $TMP_TEST_DIR/secret_files
+$SSM_TEST_DIR/bin/add_secret_file
+# echo ".secret" >> $TMP_TEST_DIR/secret_files
 echo "[DONE]"
 echo ""
 # -------------------------
