@@ -9,40 +9,39 @@ As a freelancer, I came across many teams where secrets management was done a bi
 
 While these are all fine choices, I was missing an extremely simple tool that required no new infrastructure while allowing to conveniently and securely share secrets in a small company or team.
 
-## Usage
-### Installation
+## Installation
 Note that the installation here only needs to be done once per project. New employees checking out the repository only need to add their GPG keys.
 
-#### cd to your project folder
+### cd to your project folder
 ```
 cd my_project_folder
 ```
 
-#### Clone this repository into your project as .ssm, and remove git folder
+### Clone this repository into your project as .ssm, and remove git folder
 ```
 git clone --depth 1 -q -- git@github.com:houen/ssm.git .ssm && rm -Rf .ssm/git
 ```
 
-#### Add your GPG key
+### Add your GPG key
 ```
 # Repeat for every team member GPG key
 .ssm/bin/import_pubkey KEY_ID
 ```
 `KEY_ID` can be either the Key name, Key ID, or Key fingerprint
 
-#### Add the files you wish to have encrypted to .ssm/secret_files
+### Add the files you wish to have encrypted to .ssm/secret_files
 ```
 # Example:
 .ssm/bin/add_secret_file .env
 .ssm/bin/add_secret_file some_dir/secret
 ```
 
-#### Add a line to your .gitignore to not ignore .ssm.gpg files
+### Add a line to your .gitignore to not ignore .ssm.gpg files
 ```
 echo "!*.ssm.gpg" >> .gitignore
 ```
 
-#### Encrypt secrets
+### Encrypt secrets
 ```
 # Will create a file.ssm.gpg file for each file listed in .ssm/secret_files
 # The files will be decryptable by all GPG keys listed in .ssm/gpg_keys
@@ -56,8 +55,8 @@ Your secrets are now encrypted and stored with the ending .ssm.gpg. You can now 
 
 Encrypted secrets can be decrypted with `.ssm/bin/decrypt_secrets` by any member of your team whose GPG keys were added above.
 
-### Daily usage
-#### Encrypting secret files
+## Usage
+### Encrypting secret files
 ```
 .ssm/bin/encrypt_secrets
 git commit -am "adding DB_PASSWORD to .env"
@@ -66,27 +65,54 @@ git push
 
 This will allow all developers to pull the branch with the updated secrets, run .ssm/bin/decrypt_secrets, and have all of the newly added/updated secrets.
 
-#### Decrypting secret files
+### Decrypting secret files
 ```
 git pull
 .ssm/bin/decrypt_secrets
 ```
 Now the secrets files will be added / overridden with the new values.
 
-#### Adding a new secret file
+### Adding a new secret file
 - `cd` to your project folder
 - run `.ssm/bin/add_secret_file FILE_NAME`
 - Then, from your project folder run `.ssm/bin/encrypt_secrets` and push to git.
 
-#### Adding a new developer who should be able to read the secret files
+### Adding a new developer who should be able to read the secret files
 - First, the user needs to generate a GPG key. See [GitHub's guide to doing so here](https://help.github.com/articles/generating-a-new-gpg-key/).
 - After the key is generated, have them run `bin/import_pubkey KEY_ID` to add their key to the .ssm/pubkeys dir and .ssm/gpg_keys
 - Have them commit and push to git
 - Now, someone with access can pull the relevant git branch, e.g. DEV-42-onboard-soren, decrypt the secrets, run `.ssm/bin/encrypt_secrets`, then push to git.
 - Now the new developer can pull the branch, run .ssm/bin/decrypt_secrets, and they will have all the shared secrets.
 
-#### Removing a developer
+### Removing a developer
 Remove their key ID from .ssm/gpg_keys, and remove their public key from .ssm/pubkeys. Secrets will no longer be encrypted with their GPG public key.
+
+## Security suggestions
+### Layered security / Defense-in-depth
+It is a good idea to protect your important / dangerous secrets behind [multiple layers of security](https://en.wikipedia.org/wiki/Defense_in_depth_(computing)).
+
+Any encryption protocol can have weaknesses. I would not use ssm to encrypt dangerous secrets in an open-source project where everyone can get to them. It *might* be safe but then again it might not. 
+
+However I feel comfortable using ssm to encrypt moderately-important secrets within private Git repositories on GitHub or better, a self-hosted GitLab repository. I personally use the following:
+
+- Private GitHub repository
+- 2FA
+- ssm
+
+In order for someone to steal the (not actually that valuable) secrets to my repositories, they would have to break either my password plus 2FA, or into Github itself, and *then* start cracking my strong GPG encryption. 
+
+### Strong key passphrases
+Make sure your team uses some good strong passphrases on their secret keys, to make it harder to crack the secrets even someone were to get a hold of the key itself. However, since the secret files will in most cases probably be lying around the hard drive of your developers, there are easier attack vectors than cracking the GPG keys for a determined attacker.
+
+## Useful tools to use ssm with
+### General
+- [direnv](https://github.com/direnv/direnv) which autoloads a .env file when entering a directory from shell.
+
+### Ruby
+- [dotenv](https://github.com/bkeepers/dotenv) gem for Ruby / Rails
+
+### Python
+- [python-dotenv](https://github.com/theskumar/python-dotenv) library
 
 ## FAQ
 - Can I encrypt certain files for only certain people / keys, for example .env.production?
