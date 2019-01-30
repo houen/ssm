@@ -26,36 +26,36 @@ While these are all fine choices, I was missing an extremely simple tool that re
 ## Installation
 Note that the installation here only needs to be done once per project. New employees checking out the repository only need to add their GPG keys.
 
-### cd to your project folder
+##### cd to your project folder
 ```
 cd my_project_folder
 ```
 
-### Clone this repository into your project as .ssm, and remove git folder
+##### Clone this repository into your project as .ssm, and remove git folder
 ```
 git clone --depth 1 -q -- git@github.com:houen/ssm.git .ssm && rm -Rf .ssm/git
 ```
 
-### Add your GPG key
+##### Add your GPG key
 ```
 # Repeat for every team member GPG key
 .ssm/bin/import_pubkey KEY_ID
 ```
 `KEY_ID` can be either the Key name, Key ID, or Key fingerprint
 
-### Add the files you wish to have encrypted to .ssm/secret_files
+##### Add the files you wish to have encrypted to .ssm/secret_files
 ```
 # Example:
 .ssm/bin/add_secret_file .env
 .ssm/bin/add_secret_file some_dir/secret
 ```
 
-### Add a line to your .gitignore to not ignore .ssm.gpg files
+##### Add a line to your .gitignore to not ignore .ssm.gpg files
 ```
 echo "!*.ssm.gpg" >> .gitignore
 ```
 
-### Encrypt secrets
+##### Encrypt secrets
 ```
 # Will create a file.ssm.gpg file for each file listed in .ssm/secret_files
 # The files will be decryptable by all GPG keys listed in .ssm/gpg_keys
