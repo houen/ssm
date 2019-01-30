@@ -1,3 +1,34 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [ssm - simple secrets management](#ssm---simple-secrets-management)
+  - [Motivation](#motivation)
+  - [Installation](#installation)
+    - [cd to your project folder](#cd-to-your-project-folder)
+    - [Clone this repository into your project as .ssm, and remove git folder](#clone-this-repository-into-your-project-as-ssm-and-remove-git-folder)
+    - [Add your GPG key](#add-your-gpg-key)
+    - [Add the files you wish to have encrypted to .ssm/secret_files](#add-the-files-you-wish-to-have-encrypted-to-ssmsecret_files)
+    - [Add a line to your .gitignore to not ignore .ssm.gpg files](#add-a-line-to-your-gitignore-to-not-ignore-ssmgpg-files)
+    - [Encrypt secrets](#encrypt-secrets)
+  - [Usage](#usage)
+    - [Encrypting secret files](#encrypting-secret-files)
+    - [Decrypting secret files](#decrypting-secret-files)
+    - [Adding a new secret file](#adding-a-new-secret-file)
+    - [Adding a new developer who should be able to read the secret files](#adding-a-new-developer-who-should-be-able-to-read-the-secret-files)
+    - [Removing a developer](#removing-a-developer)
+  - [Security suggestions](#security-suggestions)
+    - [Layered security / Defense-in-depth](#layered-security--defense-in-depth)
+    - [Strong key passphrases](#strong-key-passphrases)
+  - [Useful tools to use ssm with](#useful-tools-to-use-ssm-with)
+    - [General](#general)
+    - [Ruby](#ruby)
+    - [Python](#python)
+  - [FAQ](#faq)
+  - [License](#license)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # ssm - simple secrets management
 [![License: LGPL v3](https://img.shields.io/badge/License-LGPL%20v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0)
 
