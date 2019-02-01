@@ -19,7 +19,7 @@ function require_file_presence {
 }
 
 function import_public_keys {
-  echo "[INFO] Importing public keys from .ssm/pubkeys:"
+  echo "[INFO] Importing public keys from $SSM_DIR/pubkeys:"
   for filename in "$SSM_DIR/pubkeys/*.pub"; do
     [ -e "$filename" ] || continue
     gpg -q --yes --import $filename
@@ -31,7 +31,7 @@ function import_public_keys {
 # -------------------------
 file="$SSM_DIR/gpg_keys"
 if [ ! -f $file ]; then
-    echo "[ERROR] .ssm/gpg_keys file not found!"
+    echo "[ERROR] $SSM_DIR/gpg_keys file not found!"
     exit 1
 fi
 
