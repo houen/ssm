@@ -35,7 +35,8 @@ if [ ! -f $file ]; then
     exit 1
 fi
 
-sed -i -e '$a\' $file # add newline to end of file
+# Add newline to end of file
+[ -n "$(tail -c1 $file)" ] && echo >> $file
 gpg_keys=()
 while IFS= read -r line; do
   # If line is not a comment (starts with #)
@@ -54,7 +55,8 @@ if [ ! -f $file ]; then
     exit 1
 fi
 
-sed -i -e '$a\' $file # add newline to end of file
+# Add newline to end of file
+[ -n "$(tail -c1 $file)" ] && echo >> $file
 secret_files=()
 while IFS= read -r line; do
   # If line is not a comment (starts with #)
