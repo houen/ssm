@@ -20,7 +20,7 @@ function require_file_presence {
 
 function import_public_keys {
   echo "[INFO] Importing public keys from $SSM_DIR/pubkeys:"
-  for filename in "$SSM_DIR/pubkeys/*.pub"; do
+  for filename in $SSM_DIR/pubkeys/*.pub; do
     [ -e "$filename" ] || continue
     gpg -q --yes --import $filename
   done
