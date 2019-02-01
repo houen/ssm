@@ -16,7 +16,7 @@ fi
 echo "[INFO] Importing key to pubkeys dir"
 gpg --output "$PUBKEY_DIR/$keyid.pub" --export $keyid
 
-echo "[INFO] Adding key ID to .ssm/gpg_keys"
+echo "[INFO] Adding key ID to $SSM_DIR/gpg_keys"
 echo $keyid >> $SSM_DIR/gpg_keys
 
 echo "[DONE]"

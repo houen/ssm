@@ -31,23 +31,23 @@ Note that the installation here only needs to be done once per project. New empl
 cd my_project_folder
 ```
 
-##### Clone this repository into your project as .ssm, and remove git folder
+##### Clone this repository into your project as ssm, and remove git folder
 ```
-git clone --depth 1 -q -- git@github.com:houen/ssm.git .ssm && rm -Rf .ssm/git
+git clone --depth 1 -q -- git@github.com:houen/ssm.git ssm && rm -Rf ssm/git
 ```
 
 ##### Add your GPG key
 ```
 # Repeat for every team member GPG key
-.ssm/bin/import_pubkey KEY_ID
+ssm/bin/import_pubkey KEY_ID
 ```
 `KEY_ID` can be either the Key name, Key ID, or Key fingerprint
 
-##### Add the files you wish to have encrypted to .ssm/secret_files
+##### Add the files you wish to have encrypted to ssm/secret_files
 ```
 # Example:
-.ssm/bin/add_secret_file .env
-.ssm/bin/add_secret_file some_dir/secret
+ssm/bin/add_secret_file .env
+ssm/bin/add_secret_file some_dir/secret
 ```
 
 ##### Add a line to your .gitignore to not ignore .ssm.gpg files
@@ -57,49 +57,49 @@ echo "!*.ssm.gpg" >> .gitignore
 
 ##### Encrypt secrets
 ```
-# Will create a file.ssm.gpg file for each file listed in .ssm/secret_files
-# The files will be decryptable by all GPG keys listed in .ssm/gpg_keys
+# Will create a file.ssm.gpg file for each file listed in ssm/secret_files
+# The files will be decryptable by all GPG keys listed in ssm/gpg_keys
 
-.ssm/bin/encrypt_secrets
+ssm/bin/encrypt_secrets
 ```
 
 Done! 
 
 Your secrets are now encrypted and stored with the ending .ssm.gpg. You can now commit the encrypted secrets to version control and push to your git repository. 
 
-Encrypted secrets can be decrypted with `.ssm/bin/decrypt_secrets` by any member of your team whose GPG keys were added above.
+Encrypted secrets can be decrypted with `ssm/bin/decrypt_secrets` by any member of your team whose GPG keys were added above.
 
 ## Usage
 ### Encrypting secret files
 ```
-.ssm/bin/encrypt_secrets
+ssm/bin/encrypt_secrets
 git commit -am "adding DB_PASSWORD to .env"
 git push
 ```
 
-This will allow all developers to pull the branch with the updated secrets, run .ssm/bin/decrypt_secrets, and have all of the newly added/updated secrets.
+This will allow all developers to pull the branch with the updated secrets, run ssm/bin/decrypt_secrets, and have all of the newly added/updated secrets.
 
 ### Decrypting secret files
 ```
 git pull
-.ssm/bin/decrypt_secrets
+ssm/bin/decrypt_secrets
 ```
 Now the secrets files will be added / overridden with the new values.
 
 ### Adding a new secret file
 - `cd` to your project folder
-- run `.ssm/bin/add_secret_file FILE_NAME`
-- Then, from your project folder run `.ssm/bin/encrypt_secrets` and push to git.
+- run `ssm/bin/add_secret_file FILE_NAME`
+- Then, from your project folder run `ssm/bin/encrypt_secrets` and push to git.
 
 ### Adding a new developer who should be able to read the secret files
 - First, the user needs to generate a GPG key. See [GitHub's guide to doing so here](https://help.github.com/articles/generating-a-new-gpg-key/).
-- After the key is generated, have them run `bin/import_pubkey KEY_ID` to add their key to the .ssm/pubkeys dir and .ssm/gpg_keys
+- After the key is generated, have them run `bin/import_pubkey KEY_ID` to add their key to the ssm/pubkeys dir and ssm/gpg_keys
 - Have them commit and push to git
-- Now, someone with access can pull the relevant git branch, e.g. DEV-42-onboard-soren, decrypt the secrets, run `.ssm/bin/encrypt_secrets`, then push to git.
-- Now the new developer can pull the branch, run .ssm/bin/decrypt_secrets, and they will have all the shared secrets.
+- Now, someone with access can pull the relevant git branch, e.g. DEV-42-onboard-soren, decrypt the secrets, run `ssm/bin/encrypt_secrets`, then push to git.
+- Now the new developer can pull the branch, run ssm/bin/decrypt_secrets, and they will have all the shared secrets.
 
 ### Removing a developer
-Remove their key ID from .ssm/gpg_keys, and remove their public key from .ssm/pubkeys. Secrets will no longer be encrypted with their GPG public key.
+Remove their key ID from ssm/gpg_keys, and remove their public key from ssm/pubkeys. Secrets will no longer be encrypted with their GPG public key.
 
 ## Security suggestions
 ### Layered security / Defense-in-depth
@@ -134,3 +134,9 @@ Make sure your team uses some good strong passphrases on their secret keys, to m
 
 ## License
 Please see [LICENSE](https://github.com/houen/ssm/blob/master/LICENSE) for license details.
+
+<!-- ## Contributing
+### Install specific branch
+```
+git clone --single-branch --branch BRANCH_NAME --depth 1 -q -- git@github.com:houen/ssm.git ssm
+``` -->
