@@ -134,3 +134,22 @@ Make sure your team uses some good strong passphrases on their secret keys, to m
 
 ## License
 Please see [LICENSE](https://github.com/houen/ssm/blob/master/LICENSE) for license details.
+
+<!-- ## Contributing
+### Install specific branch
+```
+git clone --single-branch --branch BRANCH_NAME --depth 1 -q -- git@github.com:houen/ssm.git ssm
+``` -->
+
+## Roadmap
+- Upgrade instructions
+  <!-- - move ssm dir to ssm_upgrade_tmp dir
+  - download new version
+  - move files back to newly downloaded version
+  ```
+  mv ssm_upgrade_tmp/pubkeys/*.pub ssm/pubkeys/.
+  mv ssm_upgrade_tmp/secret_files ssm/secret_files
+  mv ssm_upgrade_tmp/gpg_keys ssm/gpg_keys
+  ``` -->
+- Add README note on always changing / updating secrets in separate branches to minimize conflict risk
+- Add README section on offboarding developers / reencrypting / why secrets can never truly be "revoked"
