@@ -134,3 +134,9 @@ Make sure your team uses some good strong passphrases on their secret keys, to m
 
 ## License
 Please see [LICENSE](https://github.com/houen/ssm/blob/master/LICENSE) for license details.
+
+<!-- ## Contributing
+### Install specific branch
+```
+git clone --single-branch --branch BRANCH_NAME --depth 1 -q -- git@github.com:houen/ssm.git ssm
+``` -->
