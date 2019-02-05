@@ -41,7 +41,7 @@ git clone --depth 1 -q -- git@github.com:houen/ssm.git ssm && rm -Rf ssm/.git
 # Repeat for every team member GPG key
 ssm/bin/import_pubkey KEY_ID
 ```
-`KEY_ID` can be either the Key name, Key ID, or Key fingerprint
+`KEY_ID` can be either the Key email, Key name, Key ID, or Key fingerprint. The pubkey file stored in ssm/pubkeys will be named after the `KEY_ID` you input. I recommend using the key email for consistent naming within the team.
 
 ##### Add the files you wish to have encrypted to ssm/secret_files
 ```
