@@ -31,9 +31,9 @@ Note that the installation here only needs to be done once per project. New empl
 cd my_project_folder
 ```
 
-##### Clone this repository into your project as ssm, and remove git folder
+##### Clone this repository into your project as ssm, and remove ssm/.git folder
 ```
-git clone --depth 1 -q -- git@github.com:houen/ssm.git ssm && rm -Rf ssm/git
+git clone --depth 1 -q -- git@github.com:houen/ssm.git ssm && rm -Rf ssm/.git
 ```
 
 ##### Add your GPG key
