@@ -105,18 +105,20 @@ Remove their key ID from ssm/gpg_keys, and remove their public key from ssm/pubk
 ### Layered security / Defense-in-depth
 It is a good idea to protect your important / dangerous secrets behind [multiple layers of security](https://en.wikipedia.org/wiki/Defense_in_depth_(computing)).
 
-Any encryption protocol can have weaknesses. I would not use ssm to encrypt dangerous secrets in an open-source project where everyone can get to them. It *might* be safe but then again it might not. 
+Any encryption protocol can have weaknesses. I would not use ssm to encrypt dangerous secrets in an open-source project where everyone can get to them. It is *probably* safe. Then again it might not be. If anyone can point me to an article explaining sufficiently why it is perfectly safe, I would very much appreciate it.
 
-However I feel comfortable using ssm to encrypt moderately-important secrets within private Git repositories on GitHub or better, a self-hosted GitLab repository. I personally use the following:
+However I feel perfectly comfortable using ssm to encrypt moderately-important secrets within private Git repositories on GitHub, or even better, a self-hosted Git repository. I personally use the following:
 
 - Private GitHub repository
-- 2FA
+- 2FA on my Github account
 - ssm
 
-In order for someone to steal the (not actually that valuable) secrets to my repositories, they would have to break either my password plus 2FA, or into Github itself, and *then* start cracking my strong GPG encryption. 
+In order for someone to steal the (not actually that valuable) secrets in my repositories, they would have to break either my password plus 2FA, or into Github itself, and *then* start cracking my strong GPG encryption. If someone is that motivated there are easier ways I'm sure.
 
 ### Strong key passphrases
-Make sure your team uses some good strong passphrases on their secret keys, to make it harder to crack the secrets even someone were to get a hold of the key itself. However, since the secret files will in most cases probably be lying around the hard drive of your developers, there are easier attack vectors than cracking the GPG keys for a determined attacker.
+Make sure your team use good strong passphrases on their secret keys. This makes it hard to crack the secrets even if someone were to get a hold of the key itself. However, since the secret files will in most cases probably be lying around the hard drive of your developers, there are easier attack vectors than cracking the GPG keys for a determined attacker. 
+
+PS: We developers should always be using encrypted hard drives.
 
 ## Useful tools to use ssm with
 ### General
