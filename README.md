@@ -52,7 +52,7 @@ ssm/bin/add_secret_file some_dir/secret
 
 ##### Add a line to your .gitignore to not ignore .ssm.gpg files
 ```
-echo "\!*.ssm.gpg" >> .gitignore
+echo '!*.ssm.gpg' >> .gitignore
 ```
 
 ##### Encrypt secrets
