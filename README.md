@@ -52,7 +52,7 @@ ssm/bin/add_secret_file some_dir/secret
 
 ##### Add a line to your .gitignore to not ignore .ssm.gpg files
 ```
-echo "!*.ssm.gpg" >> .gitignore
+echo '!*.ssm.gpg' >> .gitignore
 ```
 
 ##### Encrypt secrets
@@ -99,7 +99,14 @@ Now the secrets files will be added / overridden with the new values.
 - Now the new developer can pull the branch, run ssm/bin/decrypt_secrets, and they will have all the shared secrets.
 
 ### Removing a developer
-Remove their key ID from ssm/gpg_keys, and remove their public key from ssm/pubkeys. Secrets will no longer be encrypted with their GPG public key.
+To remove a developer:
+
+- Remove their key ID from ssm/gpg_keys
+- Remove their public key from ssm/pubkeys. Secrets will no longer be encrypted with their GPG public key.
+- Run `ssm/bin/encrypt_secrets`
+- Commit and push
+
+The removed gpg key will now no longer be able to decrypt secrets.
 
 ## Security suggestions
 ### Layered security / Defense-in-depth
