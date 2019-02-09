@@ -7,7 +7,7 @@ fi
 
 LIB_DIR="$SSM_DIR/lib"
 CONFIG_DIR="$SSM_DIR/config"
-PUBKEYS_DIR="$SSM_DIR/pubkeys"
 
+PUBKEYS_DIR="$SSM_DIR/pubkeys"
 KEYS_LIST_FILE="$CONFIG_DIR/gpg_keys"
-SECRETS_LIST_FILE="$SSM_DIR/secret_files"
+SECRETS_LIST_FILE="$CONFIG_DIR/secret_files"
