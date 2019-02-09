@@ -2,6 +2,48 @@
 set -e
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
+function start_test {
+   echo ""
+   echo -e "\033[1;36m==============================="
+   echo "[TEST] $1"
+   echo "==============================="
+   echo -e "\033[1;37m"
+}
+
+function fail_test {
+   echo ""
+   echo -e "\033[1;31m==============================="
+   echo "[FAIL]"
+   echo "==============================="
+   echo -e "\033[1;37m"
+   exit 1
+}
+
+function pass_test {
+   echo ""
+   echo -e "\033[1;32m==============================="
+   echo "[PASS]"
+   echo "==============================="
+   echo -e "\033[1;37m"
+   echo ""
+}
+
+function test_file_exists {
+   if [ -f $1 ]; then
+      pass_test
+   else
+      fail_test
+   fi
+}
+
+function test_file_equality {
+   if cmp -s $1 $2 ; then
+      pass_test
+   else
+      fail_test
+   fi
+}
+
 # -------------------------
 #  Setup dir constants
 # -------------------------
@@ -58,38 +100,36 @@ bin/add_secret_file ".secret"
 echo "[DONE]"
 echo ""
 
+# ===========================
+# TESTS BELOW HERE
+# ===========================
+
 # -------------------------
-#  Start test
+#  TEST: Import pubkey
 # -------------------------
 cd $TMP_TEST_DIR
-echo "[TEST] Importing test key to ssm"
+start_test "Importing test key to ssm"
 ./bin/import_pubkey $SSM_TEST_KEY_NAME
+test_file_exists "$TMP_TEST_DIR/config/pubkeys/$SSM_TEST_KEY_NAME.pub"
 
-echo "[TEST] .. Encrypting secrets"
+# -------------------------
+#  TEST: Encrypt secrets
+# -------------------------
+start_test "Encrypting secrets"
 ./bin/encrypt_secrets
 echo "[TEST] .. Moving original .secret file to .secret.orig"
-mv .secret .secret.orig
+test_file_exists "$TMP_TEST_DIR/.secret.ssm.gpg"
 
-echo "[TEST] .. Decrypting secrets"
+# -------------------------
+# TEST: Decrypt secrets
+# -------------------------
+start_test "Decrypting secrets"
+mv .secret .secret.orig
 bin/decrypt_secrets
 
 echo "[TEST] Comparing encrypted/decrypted file and orig file for equality:"
-if cmp -s ".secret.orig" ".secret" ; then
-   echo "[TEST] original file and encrypted/decrypted file match"
-   echo ""
-   echo -e "\033[1;32m==============================="
-   echo "[PASS]"
-   echo "==============================="
-   echo -e "\033[1;37m"
-   echo ""
-else
-   echo ""
-   echo -e "\033[1;31m==============================="
-   echo "[FAIL]"
-   echo "==============================="
-   echo -e "\033[1;37m"
-   exit 1
-fi
+echo "[TEST] original file and encrypted/decrypted file match"
+test_file_equality ".secret.orig" ".secret"
 
 # -------------------------
 #  Cleanup
