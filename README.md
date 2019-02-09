@@ -19,7 +19,7 @@ A simple tool to easily and securely share secrets within a team, using [GPG](ht
 
 
 ## Motivation
-As a freelancer, I came across many teams where secrets management was done a bit ad-hoc. Most teams were using .env files. Often you would have a .env.sample file to start with, and then you needed to get the secrets from another team member. Some were using etcd. Some were using pass. Some teams were even using full-featured solutions like Hashicorp Consul, Vault, or similar.
+As a freelancer, I came across many teams where secrets management was done a bit ad-hoc. Most teams were using .env files. Often you would have a .env.sample file to start with, and then you needed to get the secrets from another team member. Some were using etcd. Some were using pass. Some teams were using full-featured solutions like Hashicorp Consul, Vault, or similar.
 
 While these are all fine choices, I was missing an extremely simple tool that required no new infrastructure while allowing to conveniently and securely share secrets in a small company or team.
 
