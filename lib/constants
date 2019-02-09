@@ -1,0 +1,14 @@
+#!/bin/bash
+
+if [ -z $SSM_DIR ]; then
+    echo "[ERROR] SSM_DIR must be set!"
+    exit 1
+fi
+
+LIB_DIR="$SSM_DIR/lib"
+CONFIG_DIR="$SSM_DIR/config"
+PUBKEYS_DIR="$SSM_DIR/pubkeys"
+
+# KEYS_LIST_FILE="$CONFIG_DIR/gpg_keys"
+KEYS_LIST_FILE="$SSM_DIR/gpg_keys"
+SECRETS_LIST_FILE="$SSM_DIR/secret_files"

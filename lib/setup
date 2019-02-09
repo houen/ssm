@@ -1,16 +1,11 @@
 #!/bin/bash
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+SSM_DIR="$SCRIPT_DIR/.."
 
-SSM_DIR="$LIB_DIR/.."
-LIB_DIR="$SSM_DIR/lib"
-CONFIG_DIR="$SSM_DIR/config"
-PUBKEYS_DIR="$SSM_DIR/pubkeys"
+source "$SSM_DIR/lib/constants"
 
-# KEYS_LIST_FILE="$CONFIG_DIR/gpg_keys"
-KEYS_LIST_FILE="$SSM_DIR/gpg_keys"
-SECRETS_LIST_FILE="$SSM_DIR/secret_files"
-
+# Require an argument be present
 function require_argument {
   if [ -z $1 ]; then
       echo "[ERROR] No argument given!"
@@ -18,14 +13,16 @@ function require_argument {
   fi
 }
 
+# Require a file to be present
 function require_file_presence {
   require_argument $1
   if [ ! -f $1 ]; then
-    echo "[ERROR] File not found!"
+    echo "[ERROR] File not found! ($1)"
     exit 1
   fi
 }
 
+# Import all public keys in pubkeys dir
 function import_public_keys {
   echo "[INFO] Importing public keys from $PUBKEYS_DIR:"
   for filename in $PUBKEYS_DIR/*.pub; do
