@@ -1,7 +1,15 @@
 #!/bin/bash
 
-LIB_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+
 SSM_DIR="$LIB_DIR/.."
+LIB_DIR="$SSM_DIR/lib"
+CONFIG_DIR="$SSM_DIR/config"
+PUBKEYS_DIR="$SSM_DIR/pubkeys"
+
+# KEYS_LIST_FILE="$CONFIG_DIR/gpg_keys"
+KEYS_LIST_FILE="$SSM_DIR/gpg_keys"
+SECRETS_LIST_FILE="$SSM_DIR/secret_files"
 
 function require_argument {
   if [ -z $1 ]; then
@@ -19,8 +27,8 @@ function require_file_presence {
 }
 
 function import_public_keys {
-  echo "[INFO] Importing public keys from $SSM_DIR/pubkeys:"
-  for filename in $SSM_DIR/pubkeys/*.pub; do
+  echo "[INFO] Importing public keys from $PUBKEYS_DIR:"
+  for filename in $PUBKEYS_DIR/*.pub; do
     [ -e "$filename" ] || continue
     gpg -q --yes --import $filename
   done
@@ -29,9 +37,9 @@ function import_public_keys {
 # -------------------------
 # Load GPG keys var
 # -------------------------
-file="$SSM_DIR/gpg_keys"
+file=$KEYS_LIST_FILE
 if [ ! -f $file ]; then
-    echo "[ERROR] $SSM_DIR/gpg_keys file not found!"
+    echo "[ERROR] $KEYS_LIST_FILE file not found!"
     exit 1
 fi
 
@@ -49,7 +57,7 @@ done < $file # Read lines from file
 # -------------------------
 # Load secret files var
 # -------------------------
-file="$SSM_DIR/secret_files"
+file=$SECRETS_LIST_FILE
 if [ ! -f $file ]; then
     echo "[ERROR] secret_files file not found!"
     exit 1
