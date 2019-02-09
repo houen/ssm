@@ -21,7 +21,7 @@ echo ""
 # -------------------------
 #  Install ssm
 # -------------------------
-echo "[TEST_SETUP] Installing ssm as .test_ssm"
+echo "[TEST_SETUP] Installing ssm to $TMP_TEST_DIR"
 cd $TMP_TEST_DIR
 
 ### Install from git
