@@ -1,12 +1,8 @@
 #!/bin/bash
-
-# Get current dir (bin dir)
-BIN_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-SSM_DIR="$BIN_DIR/.."
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+SSM_DIR="$SCRIPT_DIR/.."
 # Source setup support file
 source "$SSM_DIR/lib/setup"
-
-PUBKEY_DIR="$SSM_DIR/pubkeys"
 
 keyid=$1
 if [ -z $keyid ]; then
@@ -14,9 +10,9 @@ if [ -z $keyid ]; then
     exit 1
 fi
 echo "[INFO] Importing key to pubkeys dir"
-gpg --output "$PUBKEY_DIR/$keyid.pub" --export $keyid
+gpg --output "$PUBKEYS_DIR/$keyid.pub" --export $keyid
 
 echo "[INFO] Adding key ID to $SSM_DIR/gpg_keys"
-echo $keyid >> $SSM_DIR/gpg_keys
+echo $keyid >> $KEYS_LIST_FILE
 
 echo "[DONE]"
