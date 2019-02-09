@@ -36,10 +36,10 @@ echo ""
 # -------------------------
 #  Generate and install temporary gpg key
 # -------------------------
-echo "[TEST_SETUP] Generating and installing temporary GPG key"
+echo "[TEST_SETUP] Generating and installing temporary GPG keys"
 cd $TMP_TEST_DIR
 # Delete old key if one already exists
-$SSM_TEST_DIR/bin/delete_test_gpg_key
+$SSM_TEST_DIR/bin/delete_test_gpg_keys
 # Create new key
 SSM_TEST_KEY_NAME="XOXO_SSM_TEST_KEY_XOXO"
 gpg -q --yes --batch --quick-generate-key --passphrase '' $SSM_TEST_KEY_NAME
@@ -98,4 +98,4 @@ echo "[CLEANUP] Removing test dir TMP_TEST_DIR"
 rm -Rf $TMP_TEST_DIR
 echo "[CLEANUP] Removing temporary gpg key"
 cd $SSM_TEST_DIR
-$SSM_TEST_DIR/bin/delete_test_gpg_key
+$SSM_TEST_DIR/bin/delete_test_gpg_keys
