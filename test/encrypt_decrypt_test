@@ -77,16 +77,17 @@ echo "[TEST] Comparing encrypted/decrypted file and orig file for equality:"
 if cmp -s ".secret.orig" ".secret" ; then
    echo "[TEST] original file and encrypted/decrypted file match"
    echo ""
-   echo "==============================="
+   echo -e "\033[1;32m==============================="
    echo "[PASS]"
    echo "==============================="
+   echo -e "\033[1;37m"
    echo ""
 else
    echo ""
-   echo "==============================="
+   echo -e "\033[1;31m==============================="
    echo "[FAIL]"
    echo "==============================="
-   echo ""
+   echo -e "\033[1;37m"
    exit 1
 fi
 
