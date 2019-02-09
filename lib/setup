@@ -59,7 +59,7 @@ done < $file # Read lines from file
 # -------------------------
 file=$SECRETS_LIST_FILE
 if [ ! -f $file ]; then
-    echo "[ERROR] secret_files file not found!"
+    echo "[ERROR] $SECRETS_LIST_FILE file not found!"
     exit 1
 fi
 
