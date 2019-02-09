@@ -42,11 +42,11 @@ fi
 
 # Add newline to end of file
 [ -n "$(tail -c1 $file)" ] && echo >> $file
-gpg_keys=()
+GPG_KEYS_FOR_ENCRYPTION=()
 while IFS= read -r line; do
   # If line is not a comment (starts with #)
   if  [[ $line != \#* ]] ; then  
-    gpg_keys+=("$line")
+    GPG_KEYS_FOR_ENCRYPTION+=("$line")
   fi
 done < $file # Read lines from file
 
@@ -62,10 +62,10 @@ fi
 
 # Add newline to end of file
 [ -n "$(tail -c1 $file)" ] && echo >> $file
-secret_files=()
+SECRET_FILES_FOR_ENCRYPTION=()
 while IFS= read -r line; do
   # If line is not a comment (starts with #)
   if  [[ $line != \#* ]] ; then
-    secret_files+=("$line")
+    SECRET_FILES_FOR_ENCRYPTION+=("$line")
   fi
 done < $file # Read lines from file
