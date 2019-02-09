@@ -23,8 +23,12 @@ echo ""
 # -------------------------
 echo "[TEST_SETUP] Installing ssm as .test_ssm"
 cd $TMP_TEST_DIR
+
+### Install from git
 # current_branch=$(git rev-parse --abbrev-ref HEAD)
 # git clone --single-branch --branch $current_branch --depth 1 -q -- git@github.com:houen/ssm.git $TMP_TEST_DIR && rm -Rf $TMP_TEST_DIR/.git
+
+### Install from local
 rsync -aq --progress $SSM_SOURCE_DIR $TMP_TEST_DIR --exclude test/.test_ssm --exclude .git
 echo "[DONE]"
 echo ""
