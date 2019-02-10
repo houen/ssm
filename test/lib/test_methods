@@ -21,6 +21,14 @@ function start_test {
    echo -e "\033[1;37m"
 }
 
+function pending_test {
+   echo ""
+   echo -e "\033[1;33m==============================="
+   echo "[PENDING TEST] $1"
+   echo "==============================="
+   echo -e "\033[1;37m"
+}
+
 function fail_test {
    echo ""
    echo -e "\033[1;31m==============================="
