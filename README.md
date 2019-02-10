@@ -168,3 +168,4 @@ git clone --single-branch --branch BRANCH_NAME --depth 1 -q -- git@github.com:ho
   ``` -->
 - Add README note on always changing / updating secrets in separate branches to minimize conflict risk.
 - Add README section on offboarding developers / reencrypting / why secrets can never truly be "revoked".
+- bin/update_ssm script for pulling new ssm versions
