@@ -20,14 +20,9 @@ function delete_gpg_key {
 
 }
 
-function create_gpg_key {
-  key_name=$1
-  gpg -q --yes --batch --quick-generate-key --passphrase '' $key_name
-}
-
 function create_test_gpg_key {
   key_name=$1
   # Delete old key if one already exists
   delete_gpg_key $key_name
-  create_gpg_key $key_name
+  gpg -q --yes --batch --quick-generate-key --passphrase '' $key_name
 }
