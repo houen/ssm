@@ -1,5 +1,4 @@
 #!/bin/bash
-set -e
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 function start_test {
@@ -13,7 +12,7 @@ function start_test {
 function fail_test {
    echo ""
    echo -e "\033[1;31m==============================="
-   echo "[FAIL]"
+   echo "[FAIL]" $1
    echo "==============================="
    echo -e "\033[1;37m"
    exit 1
@@ -29,18 +28,22 @@ function pass_test {
 }
 
 function test_file_exists {
-   if [ -f $1 ]; then
-      pass_test
-   else
-      fail_test
+   if [ ! -f $1 ]; then
+      fail_test "File does not exist: $1"
    fi
 }
 
 function test_file_equality {
-   if cmp -s $1 $2 ; then
-      pass_test
-   else
-      fail_test
+   if [ ! cmp -s $1 $2 ]; then
+      fail_test "Files are not equal: $1 != $2"
+   fi
+}
+
+function test_text_in_file {
+   text=$1
+   file=$2
+   if ! grep -Fx "$text" $file; then       
+      fail_test "Text '$text' is not in file $file"
    fi
 }
 
@@ -91,18 +94,24 @@ echo ""
 # -------------------------
 #  Setup test files
 # -------------------------
-echo "[TEST_SETUP] Creating file .secret"
+echo "[TEST_SETUP] Creating secret test files"
 cd $TMP_TEST_DIR
 echo "Lorem ipsum dolor sit amet" > .secret
-echo "[TEST_SETUP] Adding .secret to secret_files"
-
-bin/add_secret_file ".secret"
-echo "[DONE]"
-echo ""
+echo "Flum hoppelibof dumle!" > .secret2
 
 # ===========================
 # TESTS BELOW HERE
 # ===========================
+
+# -------------------------
+#  TEST: Add secret files
+# -------------------------
+start_test "Adding secret test files"
+bin/add_secret_file ".secret"
+bin/add_secret_file ".secret2"
+test_text_in_file ".secret" "$TMP_TEST_DIR/config/secret_files"
+test_text_in_file ".secret2" "$TMP_TEST_DIR/config/secret_files"
+pass_test
 
 # -------------------------
 #  TEST: Import pubkey
@@ -111,6 +120,7 @@ cd $TMP_TEST_DIR
 start_test "Importing test key to ssm"
 ./bin/import_pubkey $SSM_TEST_KEY_NAME
 test_file_exists "$TMP_TEST_DIR/config/pubkeys/$SSM_TEST_KEY_NAME.pub"
+pass_test
 
 # -------------------------
 #  TEST: Encrypt secrets
@@ -119,6 +129,7 @@ start_test "Encrypting secrets"
 ./bin/encrypt_secrets
 echo "[TEST] .. Moving original .secret file to .secret.orig"
 test_file_exists "$TMP_TEST_DIR/.secret.ssm.gpg"
+pass_test
 
 # -------------------------
 # TEST: Decrypt secrets
@@ -130,6 +141,18 @@ bin/decrypt_secrets
 echo "[TEST] Comparing encrypted/decrypted file and orig file for equality:"
 echo "[TEST] original file and encrypted/decrypted file match"
 test_file_equality ".secret.orig" ".secret"
+pass_test
+
+# -------------------------
+# TEST: Decrypt secrets as other user
+# - have pub/priv key precreated in test dir
+# - bin/import pubkey for encryption
+# - remove generated pub/priv key pair
+# - import priv key
+# - decrypt secrets
+# -------------------------
+
+# TODO: 
 
 # -------------------------
 #  Cleanup
