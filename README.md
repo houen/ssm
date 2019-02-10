@@ -43,15 +43,19 @@ git clone --depth 1 -q -- git@github.com:houen/ssm.git ssm && rm -Rf ssm/.git
 ```
 
 ##### Add your GPG key
+`KEY_ID` can be either the Key email, Key name, Key ID, or Key fingerprint. I recommend using the key email for consistent naming within the team.
+
 ```
 # Repeat for every team member GPG key
 ssm/bin/import_pubkey KEY_ID
 ```
-`KEY_ID` can be either the Key email, Key name, Key ID, or Key fingerprint. The pubkey file stored in ssm/pubkeys will be named after the `KEY_ID` you input. I recommend using the key email for consistent naming within the team.
 
-##### Add the files you wish to have encrypted to ssm/secret_files
+This will store the pubkey file `ssm/config/pubkeys/KEY_ID.pub`, and add KEY_ID as an entry in `ssm/config/gpg_keys`
+
+##### Add the files you wish to have encrypted
+The files will be added to the list at `ssm/config/secret_files`
 ```
-# Example:
+# Examples:
 ssm/bin/add_secret_file .env
 ssm/bin/add_secret_file some_dir/secret
 ```
@@ -63,8 +67,8 @@ echo '!*.ssm.gpg' >> .gitignore
 
 ##### Encrypt secrets
 ```
-# Will create a file.ssm.gpg file for each file listed in ssm/secret_files
-# The files will be decryptable by all GPG keys listed in ssm/gpg_keys
+# Will create a file.ssm.gpg file for each file listed in ssm/config/secret_files
+# The files will be decryptable by all GPG keys listed in ssm/config/gpg_keys
 
 ssm/bin/encrypt_secrets
 ```
@@ -78,6 +82,7 @@ Encrypted secrets can be decrypted with `ssm/bin/decrypt_secrets` by any member 
 ## Usage
 ### Encrypting secret files
 ```
+# (Developer has added a DB_PASSWORD to the .env file)
 ssm/bin/encrypt_secrets
 git commit -am "adding DB_PASSWORD to .env"
 git push
@@ -135,7 +140,8 @@ PS: We developers should always be using encrypted hard drives.
 
 ## Useful tools to use ssm with
 ### General
-- [direnv](https://github.com/direnv/direnv) which autoloads a .env file when entering a directory from shell.
+- [direnv](https://github.com/direnv/direnv) which autoloads a .env file when entering a directory from shell. 
+    - This for example works well with Terraform for managing secrets stored as TF_VAR_xyz env vars
 
 ### Ruby
 - [dotenv](https://github.com/bkeepers/dotenv) gem for Ruby / Rails
