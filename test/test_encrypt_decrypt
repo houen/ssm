@@ -72,6 +72,7 @@ pass_test
 # -------------------------
 
 # TODO: 
+start_test "TODO: Decrypting secrets as other user"
 
 # -------------------------
 #  Cleanup
