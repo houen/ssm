@@ -128,7 +128,9 @@ pass_test
 start_test "Encrypting secrets"
 ./bin/encrypt_secrets
 echo "[TEST] .. Moving original .secret file to .secret.orig"
+echo "[TEST] .. Moving original .secret2 file to .secret2.orig"
 test_file_exists "$TMP_TEST_DIR/.secret.ssm.gpg"
+test_file_exists "$TMP_TEST_DIR/.secret2.ssm.gpg"
 pass_test
 
 # -------------------------
