@@ -1,0 +1,116 @@
+#!/bin/bash
+# Author: Søren Houen
+# License: LGPL 3.0 https://www.gnu.org/licenses/lgpl-3.0.en.html
+source "gpg_key_methods"
+
+function require_var {
+  if [ -z $1 ]; then
+      echo "[ERROR] Required var is not set!"
+      exit 1
+  fi
+}
+
+function start_test {
+   require_var $TMP_TEST_DIR
+   
+   cd $TMP_TEST_DIR
+   echo ""
+   echo -e "\033[1;36m==============================="
+   echo "[TEST] $1"
+   echo "==============================="
+   echo -e "\033[1;37m"
+}
+
+function fail_test {
+   echo ""
+   echo -e "\033[1;31m==============================="
+   echo "[FAIL]" $1
+   echo "==============================="
+   echo -e "\033[1;37m"
+   exit 1
+}
+
+function pass_test {
+   echo ""
+   echo -e "\033[1;32m==============================="
+   echo "[PASS]"
+   echo "==============================="
+   echo -e "\033[1;37m"
+   echo ""
+}
+
+function test_file_exists {
+   if [ ! -f $1 ]; then
+      fail_test "File does not exist: $1"
+   fi
+}
+
+function test_file_equality {
+   if [ ! cmp -s $1 $2 ]; then
+      fail_test "Files are not equal: $1 != $2"
+   fi
+}
+
+function test_text_in_file {
+   text=$1
+   file=$2
+   if ! grep -Fx "$text" $file; then       
+      fail_test "Text '$text' is not in file $file"
+   fi
+}
+
+function setup_test_env {
+   require_var $TMP_TEST_DIR
+   require_var $SSM_SOURCE_DIR
+   require_var $SSM_TEST_KEY1_NAME
+   require_var $SSM_TEST_KEY2_NAME
+   
+   echo "[TEST_SETUP] Setting up temporary test dir"
+   rm -Rf $TMP_TEST_DIR
+   mkdir -p $TMP_TEST_DIR
+   echo "[DONE]"
+   echo ""
+
+   # -------------------------
+   #  Install ssm
+   # -------------------------
+   echo "[TEST_SETUP] Installing ssm to $TMP_TEST_DIR"
+   cd $TMP_TEST_DIR
+
+   ### Install from git
+   # current_branch=$(git rev-parse --abbrev-ref HEAD)
+   # git clone --single-branch --branch $current_branch --depth 1 -q -- git@github.com:houen/ssm.git $TMP_TEST_DIR && rm -Rf $TMP_TEST_DIR/.git
+
+   ### Install from local
+   rsync -aq --progress $SSM_SOURCE_DIR $TMP_TEST_DIR --exclude test/.test_ssm --exclude .git
+   echo "[DONE]"
+   echo ""
+
+   # -------------------------
+   #  Generate and install temporary gpg keys
+   # -------------------------
+   echo "[TEST_SETUP] Generating and installing temporary GPG keys"
+   create_test_gpg_key $SSM_TEST_KEY1_NAME
+   create_test_gpg_key $SSM_TEST_KEY2_NAME
+   echo "[DONE]"
+   echo ""
+
+   # -------------------------
+   #  Setup test files
+   # -------------------------
+   echo "[TEST_SETUP] Creating secret test files"
+   echo "Lorem ipsum dolor sit amet" > "$TMP_TEST_DIR/.secret"
+   echo "Flum hoppelibof dumle!" > "$TMP_TEST_DIR/.secret2"
+}
+
+function destroy_test_env {
+   require_var $TMP_TEST_DIR
+   require_var $SSM_TEST_KEY1_NAME
+   require_var $SSM_TEST_KEY2_NAME
+
+   echo "[CLEANUP] Removing test dir TMP_TEST_DIR"
+   rm -Rf $TMP_TEST_DIR
+   echo "[CLEANUP] Removing temporary gpg keys:"
+   delete_gpg_key $SSM_TEST_KEY1_NAME
+   delete_gpg_key $SSM_TEST_KEY2_NAME
+}

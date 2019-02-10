@@ -4,6 +4,7 @@
 
 function delete_gpg_key {
   key_name=$1
+  echo "Deleting gpg key '$key_name':"
   # Get key fingerprint
   out=$(gpg --list-secret-keys --with-colons --fingerprint $key_name | grep -oE -A 1 'sec:.+')
   out=$(echo $out | grep -oE 'fpr:+[^:]+')
@@ -19,4 +20,14 @@ function delete_gpg_key {
 
 }
 
-delete_gpg_key $SSM_TEST_KEY_NAME
+function create_gpg_key {
+  key_name=$1
+  gpg -q --yes --batch --quick-generate-key --passphrase '' $key_name
+}
+
+function create_test_gpg_key {
+  key_name=$1
+  # Delete old key if one already exists
+  delete_gpg_key $key_name
+  create_gpg_key $key_name
+}

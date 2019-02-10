@@ -1,51 +1,7 @@
 #!/bin/bash
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-
-function start_test {
-   echo ""
-   echo -e "\033[1;36m==============================="
-   echo "[TEST] $1"
-   echo "==============================="
-   echo -e "\033[1;37m"
-}
-
-function fail_test {
-   echo ""
-   echo -e "\033[1;31m==============================="
-   echo "[FAIL]" $1
-   echo "==============================="
-   echo -e "\033[1;37m"
-   exit 1
-}
-
-function pass_test {
-   echo ""
-   echo -e "\033[1;32m==============================="
-   echo "[PASS]"
-   echo "==============================="
-   echo -e "\033[1;37m"
-   echo ""
-}
-
-function test_file_exists {
-   if [ ! -f $1 ]; then
-      fail_test "File does not exist: $1"
-   fi
-}
-
-function test_file_equality {
-   if [ ! cmp -s $1 $2 ]; then
-      fail_test "Files are not equal: $1 != $2"
-   fi
-}
-
-function test_text_in_file {
-   text=$1
-   file=$2
-   if ! grep -Fx "$text" $file; then       
-      fail_test "Text '$text' is not in file $file"
-   fi
-}
+source $SCRIPT_DIR/lib/test_methods
+source $SCRIPT_DIR/lib/gpg_key_methods
 
 # -------------------------
 #  Setup dir constants
@@ -53,52 +9,11 @@ function test_text_in_file {
 SSM_SOURCE_DIR="$SCRIPT_DIR/.."
 SSM_TEST_DIR=$SCRIPT_DIR
 TMP_TEST_DIR=$SSM_TEST_DIR/.test_ssm
+SSM_TEST_KEY_NAME_PREFIX="_SSM__TEST_KEY__SSM_"
+SSM_TEST_KEY1_NAME="$SSM_TEST_KEY_NAME_PREFIX.test_key1"
+SSM_TEST_KEY2_NAME="$SSM_TEST_KEY_NAME_PREFIX.test_key2"
 
-# -------------------------
-#  Setup temporary test dir
-# -------------------------
-echo "[TEST_SETUP] Setting up temporary test dir"
-rm -Rf $TMP_TEST_DIR
-mkdir -p $TMP_TEST_DIR
-echo "[DONE]"
-echo ""
-
-# -------------------------
-#  Install ssm
-# -------------------------
-echo "[TEST_SETUP] Installing ssm to $TMP_TEST_DIR"
-cd $TMP_TEST_DIR
-
-### Install from git
-# current_branch=$(git rev-parse --abbrev-ref HEAD)
-# git clone --single-branch --branch $current_branch --depth 1 -q -- git@github.com:houen/ssm.git $TMP_TEST_DIR && rm -Rf $TMP_TEST_DIR/.git
-
-### Install from local
-rsync -aq --progress $SSM_SOURCE_DIR $TMP_TEST_DIR --exclude test/.test_ssm --exclude .git
-echo "[DONE]"
-echo ""
-
-# -------------------------
-#  Generate and install temporary gpg key
-# -------------------------
-echo "[TEST_SETUP] Generating and installing temporary GPG keys"
-cd $TMP_TEST_DIR
-# Delete old key if one already exists
-$SSM_TEST_DIR/bin/delete_test_gpg_keys
-# Create new key
-SSM_TEST_KEY_NAME="XOXO_SSM_TEST_KEY_XOXO"
-gpg -q --yes --batch --quick-generate-key --passphrase '' $SSM_TEST_KEY_NAME
-echo "[DONE]"
-echo ""
-
-# -------------------------
-#  Setup test files
-# -------------------------
-echo "[TEST_SETUP] Creating secret test files"
-cd $TMP_TEST_DIR
-echo "Lorem ipsum dolor sit amet" > .secret
-echo "Flum hoppelibof dumle!" > .secret2
-
+setup_test_env
 # ===========================
 # TESTS BELOW HERE
 # ===========================
@@ -118,8 +33,8 @@ pass_test
 # -------------------------
 cd $TMP_TEST_DIR
 start_test "Importing test key to ssm"
-./bin/import_pubkey $SSM_TEST_KEY_NAME
-test_file_exists "$TMP_TEST_DIR/config/pubkeys/$SSM_TEST_KEY_NAME.pub"
+./bin/import_pubkey $SSM_TEST_KEY1_NAME
+test_file_exists "$TMP_TEST_DIR/config/pubkeys/$SSM_TEST_KEY1_NAME.pub"
 pass_test
 
 # -------------------------
@@ -138,11 +53,13 @@ pass_test
 # -------------------------
 start_test "Decrypting secrets"
 mv .secret .secret.orig
+mv .secret2 .secret2.orig
 bin/decrypt_secrets
 
-echo "[TEST] Comparing encrypted/decrypted file and orig file for equality:"
-echo "[TEST] original file and encrypted/decrypted file match"
+echo "[TEST] Comparing encrypted/decrypted files and orig files for equality:"
+echo "[TEST] original file and encrypted/decrypted files match"
 test_file_equality ".secret.orig" ".secret"
+test_file_equality ".secret2.orig" ".secret2"
 pass_test
 
 # -------------------------
@@ -159,8 +76,4 @@ pass_test
 # -------------------------
 #  Cleanup
 # -------------------------
-echo "[CLEANUP] Removing test dir TMP_TEST_DIR"
-rm -Rf $TMP_TEST_DIR
-echo "[CLEANUP] Removing temporary gpg key"
-cd $SSM_TEST_DIR
-$SSM_TEST_DIR/bin/delete_test_gpg_keys
+destroy_test_env
