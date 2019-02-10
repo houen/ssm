@@ -12,6 +12,7 @@
 - [Useful tools to use ssm with](#useful-tools-to-use-ssm-with)
 - [FAQ](#faq)
 - [License](#license)
+- [Roadmap](#roadmap)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
