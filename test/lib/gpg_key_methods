@@ -1,0 +1,28 @@
+#!/bin/bash
+# Author: Søren Houen
+# License: LGPL 3.0 https://www.gnu.org/licenses/lgpl-3.0.en.html
+
+function delete_gpg_key {
+  key_name=$1
+  echo "Deleting gpg key '$key_name':"
+  # Get key fingerprint
+  out=$(gpg --list-secret-keys --with-colons --fingerprint $key_name | grep -oE -A 1 'sec:.+')
+  out=$(echo $out | grep -oE 'fpr:+[^:]+')
+  out=$(echo $out | grep -oE ':+[^:]+')
+  fingerprint=$(echo $out | grep -oE '[^:]+')
+
+  # Check that fingerprint matches exactly one key
+  num_keys_with_fingerprint=$(gpg --list-secret-keys --with-colons --fingerprint $fingerprint | grep "sec:" | wc -l)
+  if [ $num_keys_with_fingerprint == 1 ]; then
+    gpg -q --yes --batch --delete-secret-keys $fingerprint
+    gpg -q --yes --batch --delete-keys $fingerprint
+  fi
+
+}
+
+function create_test_gpg_key {
+  key_name=$1
+  # Delete old key if one already exists
+  delete_gpg_key $key_name
+  gpg -q --yes --batch --quick-generate-key --passphrase '' $key_name
+}

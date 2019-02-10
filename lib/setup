@@ -1,8 +1,11 @@
 #!/bin/bash
 
-LIB_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-SSM_DIR="$LIB_DIR/.."
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+SSM_DIR="$SCRIPT_DIR/.."
 
+source "$SSM_DIR/lib/constants"
+
+# Require an argument be present
 function require_argument {
   if [ -z $1 ]; then
       echo "[ERROR] No argument given!"
@@ -10,17 +13,19 @@ function require_argument {
   fi
 }
 
+# Require a file to be present
 function require_file_presence {
   require_argument $1
   if [ ! -f $1 ]; then
-    echo "[ERROR] File not found!"
+    echo "[ERROR] File not found! ($1)"
     exit 1
   fi
 }
 
+# Import all public keys in pubkeys dir
 function import_public_keys {
-  echo "[INFO] Importing public keys from $SSM_DIR/pubkeys:"
-  for filename in $SSM_DIR/pubkeys/*.pub; do
+  echo "[INFO] Importing public keys from $PUBKEYS_DIR:"
+  for filename in $PUBKEYS_DIR/*.pub; do
     [ -e "$filename" ] || continue
     gpg -q --yes --import $filename
   done
@@ -29,19 +34,19 @@ function import_public_keys {
 # -------------------------
 # Load GPG keys var
 # -------------------------
-file="$SSM_DIR/gpg_keys"
+file=$KEYS_LIST_FILE
 if [ ! -f $file ]; then
-    echo "[ERROR] $SSM_DIR/gpg_keys file not found!"
+    echo "[ERROR] $KEYS_LIST_FILE file not found!"
     exit 1
 fi
 
 # Add newline to end of file
 [ -n "$(tail -c1 $file)" ] && echo >> $file
-gpg_keys=()
+GPG_KEYS_FOR_ENCRYPTION=()
 while IFS= read -r line; do
   # If line is not a comment (starts with #)
   if  [[ $line != \#* ]] ; then  
-    gpg_keys+=("$line")
+    GPG_KEYS_FOR_ENCRYPTION+=("$line")
   fi
 done < $file # Read lines from file
 
@@ -49,18 +54,18 @@ done < $file # Read lines from file
 # -------------------------
 # Load secret files var
 # -------------------------
-file="$SSM_DIR/secret_files"
+file=$SECRETS_LIST_FILE
 if [ ! -f $file ]; then
-    echo "[ERROR] secret_files file not found!"
+    echo "[ERROR] $SECRETS_LIST_FILE file not found!"
     exit 1
 fi
 
 # Add newline to end of file
 [ -n "$(tail -c1 $file)" ] && echo >> $file
-secret_files=()
+SECRET_FILES_FOR_ENCRYPTION=()
 while IFS= read -r line; do
   # If line is not a comment (starts with #)
   if  [[ $line != \#* ]] ; then
-    secret_files+=("$line")
+    SECRET_FILES_FOR_ENCRYPTION+=("$line")
   fi
 done < $file # Read lines from file

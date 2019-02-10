@@ -19,9 +19,15 @@ A simple tool to easily and securely share secrets within a team, using [GPG](ht
 
 
 ## Motivation
-As a freelancer, I came across many teams where secrets management was done a bit ad-hoc. Most teams were using .env files. Often you would have a .env.sample file to start with, and then you needed to get the secrets from another team member. Some were using etcd. Some were using pass. Some teams were even using full-featured solutions like Hashicorp Consul, Vault, or similar.
+As a freelancer, I came across many teams where secrets management was done a bit ad-hoc. Most teams were using .env files. Often you would have a .env.sample file to start with, and then you needed to get the secrets from another team member. Some were using etcd. Some were using pass. Some teams were using full-featured solutions like Hashicorp Consul, Vault, or similar.
 
-While these are all fine choices, I was missing an extremely simple tool that required no new infrastructure while allowing to conveniently and securely share secrets in a small company or team.
+While these are all fine choices, it seemed that either:
+
+- The overhead added from "proper" secrets management was more than necessary for a small team.
+- The adding or removing of secrets was done in a too ad-hoc way, causing confusion and weird local bugs. 
+- Onboarding new developers was made more difficult by not having a structured way of shering secrets.
+
+I was missing an extremely simple tool that required no new infrastructure or tools, while allowing to conveniently and securely share secrets in a small company or team.
 
 ## Installation
 Note that the installation here only needs to be done once per project. New employees checking out the repository only need to add their GPG keys.
@@ -160,5 +166,6 @@ git clone --single-branch --branch BRANCH_NAME --depth 1 -q -- git@github.com:ho
   mv ssm_upgrade_tmp/secret_files ssm/secret_files
   mv ssm_upgrade_tmp/gpg_keys ssm/gpg_keys
   ``` -->
-- Add README note on always changing / updating secrets in separate branches to minimize conflict risk
-- Add README section on offboarding developers / reencrypting / why secrets can never truly be "revoked"
+- Add README note on always changing / updating secrets in separate branches to minimize conflict risk.
+- Add README section on offboarding developers / reencrypting / why secrets can never truly be "revoked".
+- bin/update_ssm script for pulling new ssm versions
