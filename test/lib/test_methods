@@ -1,17 +1,12 @@
 #!/usr/bin/env bash
 # Author: Søren Houen
 # License: LGPL 3.0 https://www.gnu.org/licenses/lgpl-3.0.en.html
-source "gpg_key_methods"
-
-function require_var {
-  if [ -z $1 ]; then
-      echo "[ERROR] Required var is not set!"
-      exit 1
-  fi
-}
+TEST_METHODS_SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+source "$TEST_METHODS_SCRIPT_DIR/gpg_key_methods"
+source "$TEST_METHODS_SCRIPT_DIR/../../lib/require_var"
 
 function start_test {
-   require_var $TMP_TEST_DIR
+   require_var $TMP_TEST_DIR "TMP_TEST_DIR"
    
    cd $TMP_TEST_DIR
    echo ""
@@ -68,10 +63,10 @@ function test_text_in_file {
 }
 
 function setup_test_env {
-   require_var $TMP_TEST_DIR
-   require_var $SSM_SOURCE_DIR
-   require_var $SSM_TEST_KEY1_NAME
-   require_var $SSM_TEST_KEY2_NAME
+   require_var $TMP_TEST_DIR "TMP_TEST_DIR"
+   require_var $SSM_SOURCE_DIR "SSM_SOURCE_DIR"
+   require_var $SSM_TEST_KEY1_NAME "SSM_TEST_KEY1_NAME"
+   require_var $SSM_TEST_KEY2_NAME "SSM_TEST_KEY2_NAME"
    
    echo "[TEST_SETUP] Setting up temporary test dir"
    rm -Rf $TMP_TEST_DIR
@@ -112,9 +107,9 @@ function setup_test_env {
 }
 
 function destroy_test_env {
-   require_var $TMP_TEST_DIR
-   require_var $SSM_TEST_KEY1_NAME
-   require_var $SSM_TEST_KEY2_NAME
+   require_var $TMP_TEST_DIR "TMP_TEST_DIR"
+   require_var $SSM_TEST_KEY1_NAME "SSM_TEST_KEY1_NAME"
+   require_var $SSM_TEST_KEY2_NAME "SSM_TEST_KEY2_NAME"
 
    echo "[CLEANUP] Removing test dir TMP_TEST_DIR"
    rm -Rf $TMP_TEST_DIR
