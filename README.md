@@ -31,6 +31,11 @@ While these are all fine choices, it seemed that either:
 I was missing an extremely simple tool that required no new infrastructure or tools, while allowing to conveniently and securely share secrets in a small company or team.
 
 ## Installation
+### Via install script
+
+```curl https://raw.githubusercontent.com/houen/ssm/install-script/install.sh -sSf | sh```
+
+### Manually
 Note that the installation here only needs to be done once per project. New employees checking out the repository only need to add their GPG keys.
 
 ##### cd to your project folder
