@@ -7,11 +7,26 @@
 
 - [Motivation](#motivation)
 - [Installation](#installation)
+  - [Via install script](#via-install-script)
+  - [Manual installation](#manual-installation)
+  - [Post-install setup](#post-install-setup)
 - [Usage](#usage)
+  - [Encrypting secret files](#encrypting-secret-files)
+  - [Decrypting secret files](#decrypting-secret-files)
+  - [Adding a new secret file](#adding-a-new-secret-file)
+  - [Adding a new developer](#adding-a-new-developer)
+  - [Removing a developer](#removing-a-developer)
 - [Security suggestions](#security-suggestions)
+  - [Layered security / Defense-in-depth](#layered-security--defense-in-depth)
+  - [Strong key passphrases](#strong-key-passphrases)
 - [Useful tools to use ssm with](#useful-tools-to-use-ssm-with)
+  - [General](#general)
+  - [Ruby](#ruby)
+  - [Python](#python)
 - [FAQ](#faq)
 - [License](#license)
+- [Contributing](#contributing)
+  - [Install specific branch](#install-specific-branch)
 - [Roadmap](#roadmap)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -31,6 +46,18 @@ While these are all fine choices, it seemed that either:
 I was missing an extremely simple tool that required no new infrastructure or tools, while allowing to conveniently and securely share secrets in a small company or team.
 
 ## Installation
+### Via install script
+##### Change to your project directory
+```
+cd my_project_folder
+```
+##### Run install script
+[Link to script](https://raw.githubusercontent.com/houen/ssm/master/install.sh)
+```
+bash <(curl -s https://raw.githubusercontent.com/houen/ssm/master/install.sh)
+```
+
+### Manual installation
 Note that the installation here only needs to be done once per project. New employees checking out the repository only need to add their GPG keys.
 
 ##### cd to your project folder
@@ -43,6 +70,12 @@ cd my_project_folder
 git clone --depth 1 -q -- git@github.com:houen/ssm.git ssm && rm -Rf ssm/.git
 ```
 
+##### Add a line to your .gitignore to not ignore .ssm.gpg files
+```
+echo '!*.ssm.gpg' >> .gitignore
+```
+
+### Post-install setup
 ##### Add your GPG key
 `KEY_ID` can be either the Key email, Key name, Key ID, or Key fingerprint. I recommend using the key email for consistent naming within the team.
 
@@ -59,11 +92,6 @@ The files will be added to the list at `ssm/config/secret_files`
 # Examples:
 ssm/bin/add_secret_file .env
 ssm/bin/add_secret_file some_dir/secret
-```
-
-##### Add a line to your .gitignore to not ignore .ssm.gpg files
-```
-echo '!*.ssm.gpg' >> .gitignore
 ```
 
 ##### Encrypt secrets
@@ -103,7 +131,7 @@ Now the secrets files will be added / overridden with the new values.
 - run `ssm/bin/add_secret_file FILE_NAME`
 - Then, from your project folder run `ssm/bin/encrypt_secrets` and push to git.
 
-### Adding a new developer who should be able to read the secret files
+### Adding a new developer
 - First, the user needs to generate a GPG key. See [GitHub's guide to doing so here](https://help.github.com/articles/generating-a-new-gpg-key/).
 - After the key is generated, have them run `bin/import_pubkey KEY_ID` to add their key to the ssm/pubkeys dir and ssm/gpg_keys
 - Have them commit and push to git
@@ -157,11 +185,13 @@ PS: We developers should always be using encrypted hard drives.
 ## License
 Please see [LICENSE](https://github.com/houen/ssm/blob/master/LICENSE) for license details.
 
-<!-- ## Contributing
+## Contributing
+Work in progress
+
 ### Install specific branch
 ```
 git clone --single-branch --branch BRANCH_NAME --depth 1 -q -- git@github.com:houen/ssm.git ssm
-``` -->
+```
 
 ## Roadmap
 - Upgrade instructions
