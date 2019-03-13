@@ -36,15 +36,11 @@ I was missing an extremely simple tool that required no new infrastructure or to
 ```
 cd my_project_folder
 ```
-##### Run [install script](https://raw.githubusercontent.com/houen/ssm/install-script/install.sh)
+##### Run install script
+[Link to script](https://raw.githubusercontent.com/houen/ssm/master/install.sh)
 ```
 bash <(curl -s https://raw.githubusercontent.com/houen/ssm/master/install.sh)
 ```
-<!-- 
-
-bash <(curl -s https://raw.githubusercontent.com/houen/ssm/install-script/install.sh)
-
--->
 
 ### Manual installation
 Note that the installation here only needs to be done once per project. New employees checking out the repository only need to add their GPG keys.
