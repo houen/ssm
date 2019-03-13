@@ -7,9 +7,22 @@
 
 - [Motivation](#motivation)
 - [Installation](#installation)
+  - [Via install script](#via-install-script)
+  - [Manual installation](#manual-installation)
+  - [Post-install setup](#post-install-setup)
 - [Usage](#usage)
+  - [Encrypting secret files](#encrypting-secret-files)
+  - [Decrypting secret files](#decrypting-secret-files)
+  - [Adding a new secret file](#adding-a-new-secret-file)
+  - [Adding a new developer who should be able to read the secret files](#adding-a-new-developer-who-should-be-able-to-read-the-secret-files)
+  - [Removing a developer](#removing-a-developer)
 - [Security suggestions](#security-suggestions)
+  - [Layered security / Defense-in-depth](#layered-security--defense-in-depth)
+  - [Strong key passphrases](#strong-key-passphrases)
 - [Useful tools to use ssm with](#useful-tools-to-use-ssm-with)
+  - [General](#general)
+  - [Ruby](#ruby)
+  - [Python](#python)
 - [FAQ](#faq)
 - [License](#license)
 - [Roadmap](#roadmap)
@@ -55,6 +68,11 @@ cd my_project_folder
 git clone --depth 1 -q -- git@github.com:houen/ssm.git ssm && rm -Rf ssm/.git
 ```
 
+##### Add a line to your .gitignore to not ignore .ssm.gpg files
+```
+echo '!*.ssm.gpg' >> .gitignore
+```
+
 ### Post-install setup
 ##### Add your GPG key
 `KEY_ID` can be either the Key email, Key name, Key ID, or Key fingerprint. I recommend using the key email for consistent naming within the team.
@@ -72,11 +90,6 @@ The files will be added to the list at `ssm/config/secret_files`
 # Examples:
 ssm/bin/add_secret_file .env
 ssm/bin/add_secret_file some_dir/secret
-```
-
-##### Add a line to your .gitignore to not ignore .ssm.gpg files
-```
-echo '!*.ssm.gpg' >> .gitignore
 ```
 
 ##### Encrypt secrets
