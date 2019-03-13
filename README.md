@@ -38,12 +38,11 @@ cd my_project_folder
 ```
 ##### Run [install script](https://raw.githubusercontent.com/houen/ssm/install-script/install.sh)
 ```
-curl https://raw.githubusercontent.com/houen/ssm/master/install.sh -sSf | sh
+bash <(curl -s https://raw.githubusercontent.com/houen/ssm/master/install.sh)
 ```
 <!-- 
 
-$(curl -fsSL https://raw.githubusercontent.com/houen/ssm/install-script/install.sh)
-curl https://raw.githubusercontent.com/houen/ssm/install-script/install.sh -sSf | sh 
+bash <(curl -s https://raw.githubusercontent.com/houen/ssm/install-script/install.sh)
 
 -->
 
