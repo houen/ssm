@@ -55,6 +55,7 @@ cd my_project_folder
 git clone --depth 1 -q -- git@github.com:houen/ssm.git ssm && rm -Rf ssm/.git
 ```
 
+### Post-install setup
 ##### Add your GPG key
 `KEY_ID` can be either the Key email, Key name, Key ID, or Key fingerprint. I recommend using the key email for consistent naming within the team.
 
