@@ -5,10 +5,18 @@ SSM_DIR="$SCRIPT_DIR/.."
 source "$SSM_DIR/lib/setup"
 
 keyid=$1
+
+# TODO: Allow no key name and ask for it instead
+# read -p "[INPUT] Please enter the name of your gpg key:" gpg_key_name
+# echo $gpg_key_name
 if [ -z $keyid ]; then
     echo "[ERROR] You must input a key ID, like so: bin/import_pubkey E1960A37"
     exit 1
 fi
+
+echo "[INFO] Checking that key exists"
+gpg --list-keys $keyid || echo "[ERROR] Key $keyid does not exist. Aborting." && exit 1
+
 echo "[INFO] Importing key to pubkeys dir"
 gpg --output "$PUBKEYS_DIR/$keyid.pub" --export $keyid
 
