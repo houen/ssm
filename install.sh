@@ -17,6 +17,8 @@ echo "[INFO] Installing to $install_dir"
 # ====================================
 echo ""
 read -p "[INPUT] Are you sure you want to install here? (Y/n): " do_install
+do_install=${do_install:-Y}
+
 if [ "$do_install" = "n" ] || [ "$do_install" = "N" ]; then
     echo "[INFO] Aborting installation"
     exit 1
