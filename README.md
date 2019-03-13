@@ -14,7 +14,7 @@
   - [Encrypting secret files](#encrypting-secret-files)
   - [Decrypting secret files](#decrypting-secret-files)
   - [Adding a new secret file](#adding-a-new-secret-file)
-  - [Adding a new developer who should be able to read the secret files](#adding-a-new-developer-who-should-be-able-to-read-the-secret-files)
+  - [Adding a new developer](#adding-a-new-developer)
   - [Removing a developer](#removing-a-developer)
 - [Security suggestions](#security-suggestions)
   - [Layered security / Defense-in-depth](#layered-security--defense-in-depth)
@@ -25,6 +25,8 @@
   - [Python](#python)
 - [FAQ](#faq)
 - [License](#license)
+- [Contributing](#contributing)
+  - [Install specific branch](#install-specific-branch)
 - [Roadmap](#roadmap)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -129,7 +131,7 @@ Now the secrets files will be added / overridden with the new values.
 - run `ssm/bin/add_secret_file FILE_NAME`
 - Then, from your project folder run `ssm/bin/encrypt_secrets` and push to git.
 
-### Adding a new developer who should be able to read the secret files
+### Adding a new developer
 - First, the user needs to generate a GPG key. See [GitHub's guide to doing so here](https://help.github.com/articles/generating-a-new-gpg-key/).
 - After the key is generated, have them run `bin/import_pubkey KEY_ID` to add their key to the ssm/pubkeys dir and ssm/gpg_keys
 - Have them commit and push to git
@@ -183,11 +185,13 @@ PS: We developers should always be using encrypted hard drives.
 ## License
 Please see [LICENSE](https://github.com/houen/ssm/blob/master/LICENSE) for license details.
 
-<!-- ## Contributing
+## Contributing
+Work in progress
+
 ### Install specific branch
 ```
 git clone --single-branch --branch BRANCH_NAME --depth 1 -q -- git@github.com:houen/ssm.git ssm
-``` -->
+```
 
 ## Roadmap
 - Upgrade instructions
