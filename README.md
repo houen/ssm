@@ -44,6 +44,14 @@ While the above are all valid choices, it seemed that ofter:
 
 I was missing an extremely simple tool that required no new infrastructure or tools, while allowing to conveniently and securely share secrets in a small company or team.
 
+## Benefits of ssm
+- No new tools, servers or systems (assuming you already have Git and gpg.)
+- It takes about one minute to add to a new project (assuming you have gpg and a key already).
+- Secrets are securely encrypted via gpg.
+- Secrets are kept in the same Git repository as the code they relate to, making configuration drift errors less likely.
+- Secrets are versioned, so if a secret is accidentally overridden, it can be recovered.
+- Offboarding is simply a matter of [removing the offboarded developer](#removing-a-developer) and reencrypting secrets.
+
 ## Installation
 ### Via install script
 ##### Change to your project directory
@@ -146,6 +154,10 @@ To remove a developer:
 
 The removed gpg key will now no longer be able to decrypt secrets.
 
+Note that offobarding a developer in this way of course does not prevent them from using the secrets they already have, or could have stored somewhere. However, this is always the case for text-based secrets. Nothing is stopping anyone from copying a file off their computer, taking a photo of their screen, or similar.
+
+In order to be 100% safe after offboarding a developer all secrets would need to be rotated. A good middle ground here is to rotate the very most sensitive ones, such as database passwords or similar.
+
 ## Security suggestions
 ### Layered security / Defense-in-depth
 It is a good idea to protect your important / dangerous secrets behind [multiple layers of security](https://en.wikipedia.org/wiki/Defense_in_depth_(computing)).
@@ -178,7 +190,7 @@ PS: We developers should always be using encrypted hard drives.
 
 ## FAQ
 - Can I encrypt certain files for only certain people / keys, for example .env.production?
-  - This would be very useful indeed. However, I want to see if this proiject is useful for other people than myself before working on it. Please open a pull request if you have the time to implement this.
+  - This would be very useful indeed. However, I want to see if this proiject is useful for other people than myself before working on it.
 
 ## License
 Please see [LICENSE](https://github.com/houen/ssm/blob/master/LICENSE) for license details.
