@@ -1,5 +1,6 @@
 # ssm - simple secrets management
 [![License: LGPL v3](https://img.shields.io/badge/License-LGPL%20v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0)
+
 A simple tool to easily and securely share secrets within a team, using [GPG](https://en.wikipedia.org/wiki/GNU_Privacy_Guard) and Git. No extra tools, servers or SaaS systems needed.
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
