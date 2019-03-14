@@ -1,5 +1,6 @@
 # ssm - simple secrets management
 [![License: LGPL v3](https://img.shields.io/badge/License-LGPL%20v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0)
+A simple tool to easily and securely share secrets within a team, using [GPG](https://en.wikipedia.org/wiki/GNU_Privacy_Guard) and Git. No extra tools, servers or SaaS systems needed.
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -31,9 +32,6 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-A simple tool to easily and securely share secrets within a team, using [GPG](https://en.wikipedia.org/wiki/GNU_Privacy_Guard) and Git. No extra tools, servers or SaaS systems needed.
-
-
 ## Motivation
 As a freelancer, I came across many teams where secrets management was done a bit ad-hoc. Most teams were using .env files. Often you would have a .env.sample file to start with, and then you needed to get the secrets from another team member. Some were using etcd. Some were using pass. Some teams were using full-featured solutions like Hashicorp Consul, Vault, or similar.
 
@@ -52,7 +50,6 @@ I was missing an extremely simple tool that required no new infrastructure or to
 cd my_project_folder
 ```
 ##### Run install script
-[Link to script](https://raw.githubusercontent.com/houen/ssm/master/install.sh)
 ```
 bash <(curl -s https://raw.githubusercontent.com/houen/ssm/master/install.sh)
 ```
@@ -86,7 +83,7 @@ ssm/bin/import_pubkey KEY_ID
 
 This will store the pubkey file `ssm/config/pubkeys/KEY_ID.pub`, and add KEY_ID as an entry in `ssm/config/gpg_keys`
 
-##### Add the files you wish to have encrypted
+##### Add the secret files you wish to have encrypted
 The files will be added to the list at `ssm/config/secret_files`
 ```
 # Examples:
@@ -94,7 +91,7 @@ ssm/bin/add_secret_file .env
 ssm/bin/add_secret_file some_dir/secret
 ```
 
-##### Encrypt secrets
+##### Encrypt secret files
 ```
 # Will create a file.ssm.gpg file for each file listed in ssm/config/secret_files
 # The files will be decryptable by all GPG keys listed in ssm/config/gpg_keys
