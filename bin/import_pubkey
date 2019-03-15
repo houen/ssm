@@ -15,7 +15,7 @@ if [ -z $keyid ]; then
 fi
 
 echo "[INFO] Checking that key exists"
-gpg --list-keys $keyid || echo "[ERROR] Key $keyid does not exist. Aborting." && exit 1
+gpg --list-keys $keyid || (echo "[ERROR] Key $keyid does not exist. Aborting." && exit 1)
 
 echo "[INFO] Importing key to pubkeys dir"
 gpg --output "$PUBKEYS_DIR/$keyid.pub" --export $keyid
