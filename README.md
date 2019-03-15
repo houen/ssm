@@ -63,27 +63,9 @@ cd my_project_folder
 bash <(curl -s https://raw.githubusercontent.com/houen/ssm/master/install.sh)
 ```
 
-### Manual installation
-Note that the installation here only needs to be done once per project. New employees checking out the repository only need to add their GPG keys.
-
-##### cd to your project folder
-```
-cd my_project_folder
-```
-
-##### Clone this repository into your project as ssm, and remove ssm/.git folder
-```
-git clone --depth 1 -q -- git@github.com:houen/ssm.git ssm && rm -Rf ssm/.git
-```
-
-##### Add a line to your .gitignore to not ignore .ssm.gpg files
-```
-echo '!*.ssm.gpg' >> .gitignore
-```
-
-### Post-install setup
 ##### Add your GPG key
-`KEY_ID` can be either the Key email, Key name, Key ID, or Key fingerprint. I recommend using the key email for consistent naming within the team.
+`KEY_ID` can be either the Key email, Key name, Key ID, or Key fingerprint. The key will be identified by this id in the ssm config files.
+I would recommend using the key email for consistent naming within the team.
 
 ```
 # Repeat for every team member GPG key
