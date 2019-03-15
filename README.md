@@ -190,7 +190,7 @@ PS: We developers should always be using encrypted hard drives.
 
 ## FAQ
 - Can I encrypt certain files for only certain people / keys, for example .env.production?
-  - This would be very useful indeed. However, I want to see if this proiject is useful for other people than myself before working on it.
+  - This would be very useful indeed. However, I want to see if this project is useful for other people than myself before working on it.
 
 ## License
 Please see [LICENSE](https://github.com/houen/ssm/blob/master/LICENSE) for license details.
