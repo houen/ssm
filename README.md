@@ -34,15 +34,18 @@ A simple tool to easily and securely share secrets within a team, using [GPG](ht
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Motivation
-As a freelancer, I came across many teams where secrets management was done a bit ad-hoc. Most were using .env files. Some were using pass. Some etcd. Some teams were using full-featured solutions like Hashicorp Consul, Vault, or similar. Often you would have a .env.sample file to start with, and then you needed to get the secrets from another team member. When secrets were updated theese were then sent around in more or less secure ways between teams members.
+As a freelancer, I came across many teams where secrets management was done a bit ad-hoc. Most were using .env files. Some were using pass. Some etcd. Some teams were using full-featured solutions like Hashicorp Consul, Vault, or similar. Often you would have a .env.sample file to start with, and then you needed to get the secrets from another team member. When secrets were updated these were then sent around in more or less secure ways between teams members.
 
 While the above are all valid choices, it seemed that often:
 
 - Onboarding new developers was made more difficult by not having a structured way of sharing secrets.
 - The adding or removing of secrets was done in a too ad-hoc way, causing confusion and weird local dev bugs. 
 - The overhead added from "proper" secrets management was more than necessary for a small team.
+- The adding or removing of secrets was done in a too ad-hoc way, causing confusion and weird local bugs. 
+- Onboarding new developers was made more difficult by not having a structured way of sharing secrets.
+- Offboarding was non-existent.
 
-I was missing an extremely simple tool that required no new infrastructure or tools, while allowing to conveniently and securely share secrets in a small company or team.
+I was missing an extremely simple tool that required no new infrastructure or tools, while allowing to conveniently and securely share secrets in a small company or team. So I created this.
 
 ## Benefits of ssm
 - No new tools, servers or systems (assuming you already have Git and gpg.)
@@ -115,9 +118,26 @@ ssm/bin/decrypt_secrets
 Now the secrets files will be added / overridden with the new values.
 
 ### Adding a new secret file
-- `cd` to your project folder
-- run `ssm/bin/add_secret_file FILE_NAME`
-- Then, from your project folder run `ssm/bin/encrypt_secrets` and push to git.
+- cd to your project folder
+- Run `ssm/bin/add_secret_file FILE_NAME`
+- Run `ssm/bin/encrypt_secrets` 
+- Commit to git 
+- Push to git repository
+
+- Other developers can now pull the updated secrets
+
+### Updating a secret
+- cd to your project folder
+- change the secret in the file
+- Run `ssm/bin/encrypt_secrets`
+- Commit to git 
+- Push to git repository
+
+- Other developers can now pull the updated secrets
+
+### Pull updated secrets
+- Pull from git repository
+- Run `ssm/bin/decrypt_secrets`
 
 ### Adding a new developer
 - First, the user needs to generate a GPG key. See [GitHub's guide to doing so here](https://help.github.com/articles/generating-a-new-gpg-key/).
@@ -126,7 +146,7 @@ Now the secrets files will be added / overridden with the new values.
 - Now, someone with access can pull the relevant git branch, e.g. DEV-42-onboard-soren, decrypt the secrets, run `ssm/bin/encrypt_secrets`, then push to git.
 - Now the new developer can pull the branch, run ssm/bin/decrypt_secrets, and they will have all the shared secrets.
 
-### Removing a developer
+### Offbarding a developer
 To remove a developer:
 
 - Remove their key ID from ssm/gpg_keys
@@ -141,6 +161,10 @@ Note that offobarding a developer in this way of course does not prevent them fr
 In order to be 100% safe after offboarding a developer all secrets would need to be rotated. A good middle ground here is to rotate the very most sensitive ones, such as database passwords or similar.
 
 ## Security suggestions
+## Suggestions for use
+### Update secrets in a single branch
+In order to minimize conflicts, secrets should as much as possible be updated in a single git branch named as such, e.g 142-add-redis-db-password. Then the Redis db password is added and distributed to all developers in a short-turnaround pull request. This lowers the risk of conflicts, since the new secrets file will be merged into master and distributed quickly.
+
 ### Layered security / Defense-in-depth
 It is a good idea to protect your important / dangerous secrets behind [multiple layers of security](https://en.wikipedia.org/wiki/Defense_in_depth_(computing)).
 
@@ -197,4 +221,3 @@ git clone --single-branch --branch BRANCH_NAME --depth 1 -q -- git@github.com:ho
   ``` -->
 - Add README note on always changing / updating secrets in separate branches to minimize conflict risk.
 - bin/update_ssm script for pulling new ssm versions
-- bin/check_if_secrets_up_to_date script for letting users know when they should run bin/decrypt_secrets
