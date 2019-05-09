@@ -146,7 +146,7 @@ Now the secrets files will be added / overridden with the new values.
 - Now, someone with access can pull the relevant git branch, e.g. DEV-42-onboard-soren, decrypt the secrets, run `ssm/bin/encrypt_secrets`, then push to git.
 - Now the new developer can pull the branch, run ssm/bin/decrypt_secrets, and they will have all the shared secrets.
 
-### Offbarding a developer
+### Offboarding a developer
 To remove a developer:
 
 - Remove their key ID from ssm/gpg_keys
@@ -210,14 +210,4 @@ git clone --single-branch --branch BRANCH_NAME --depth 1 -q -- git@github.com:ho
 ```
 
 ## Roadmap
-- Upgrade instructions
-  <!-- - move ssm dir to ssm_upgrade_tmp dir
-  - download new version
-  - move files back to newly downloaded version
-  ```
-  mv ssm_upgrade_tmp/pubkeys/*.pub ssm/pubkeys/.
-  mv ssm_upgrade_tmp/secret_files ssm/secret_files
-  mv ssm_upgrade_tmp/gpg_keys ssm/gpg_keys
-  ``` -->
-- Add README note on always changing / updating secrets in separate branches to minimize conflict risk.
-- bin/update_ssm script for pulling new ssm versions
+- Open to suggestions :-)
