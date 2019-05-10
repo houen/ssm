@@ -7,6 +7,7 @@ source "$SSM_DIR/lib/constants"
 source "$SSM_DIR/lib/require_argument"
 source "$SSM_DIR/lib/require_file_presence"
 source "$SSM_DIR/lib/import_public_keys"
+source "$SSM_DIR/lib/get_latest_ssm_version"
 
 # -------------------------
 # Load GPG keys var

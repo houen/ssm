@@ -9,4 +9,5 @@ $SCRIPT_DIR/test_encrypt_secrets
 $SCRIPT_DIR/test_decrypt_secrets
 
 # TODO:
+$SCRIPT_DIR/test_for_updates_to_ssm
 $SCRIPT_DIR/test_decrypt_secrets_as_other_user
