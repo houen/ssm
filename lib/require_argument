@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+# Require an argument be present
+function require_argument {
+  if [ -z $1 ]; then
+      echo "[ERROR] No argument given!"
+      exit 1
+  fi
+}

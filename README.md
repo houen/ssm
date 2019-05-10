@@ -3,24 +3,28 @@
 
 A simple tool to easily and securely share secrets within a team, using [GPG](https://en.wikipedia.org/wiki/GNU_Privacy_Guard) and Git. No extra tools, servers or SaaS systems needed.
 
+<!-- doctoc README.md --maxlevel 3 -->
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Motivation](#motivation)
+- [Benefits of ssm](#benefits-of-ssm)
 - [Installation](#installation)
   - [Via install script](#via-install-script)
-  - [Manual installation](#manual-installation)
-  - [Post-install setup](#post-install-setup)
 - [Usage](#usage)
   - [Encrypting secret files](#encrypting-secret-files)
   - [Decrypting secret files](#decrypting-secret-files)
   - [Adding a new secret file](#adding-a-new-secret-file)
+  - [Updating a secret](#updating-a-secret)
+  - [Pull updated secrets](#pull-updated-secrets)
+  - [Check for updated secrets to decrypt](#check-for-updated-secrets-to-decrypt)
   - [Adding a new developer](#adding-a-new-developer)
-  - [Removing a developer](#removing-a-developer)
-- [Security suggestions](#security-suggestions)
+  - [Offbarding a developer](#offbarding-a-developer)
+- [Suggestions for use / security](#suggestions-for-use--security)
+  - [Update secrets in a single branch](#update-secrets-in-a-single-branch)
   - [Layered security / Defense-in-depth](#layered-security--defense-in-depth)
-  - [Strong key passphrases](#strong-key-passphrases)
+  - [Strong secret key passphrases](#strong-secret-key-passphrases)
 - [Useful tools to use ssm with](#useful-tools-to-use-ssm-with)
   - [General](#general)
   - [Ruby](#ruby)
@@ -28,7 +32,6 @@ A simple tool to easily and securely share secrets within a team, using [GPG](ht
 - [FAQ](#faq)
 - [License](#license)
 - [Contributing](#contributing)
-  - [Install specific branch](#install-specific-branch)
 - [Roadmap](#roadmap)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -93,9 +96,9 @@ ssm/bin/add_secret_file some_dir/secret
 ssm/bin/encrypt_secrets
 ```
 
-Done! 
+Your secrets are now encrypted and stored with the ending .ssm.gpg. 
 
-Your secrets are now encrypted and stored with the ending .ssm.gpg. You can now commit the encrypted secrets to version control and push to your git repository. 
+You can now commit the encrypted secrets to version control and push to your git repository. 
 
 Encrypted secrets can be decrypted with `ssm/bin/decrypt_secrets` by any member of your team whose GPG keys were added above.
 
@@ -139,6 +142,20 @@ Now the secrets files will be added / overridden with the new values.
 - Pull from git repository
 - Run `ssm/bin/decrypt_secrets`
 
+### Check for updated secrets to decrypt
+SSM includes a script to automatically check whether there are new/updated secrets which should be decrypted:
+
+```bash
+  ssm/bin/check_for_updated_secrets
+```
+
+If there are newer secrets than the ones currently decrypted by the user, the script will output an info message reporting this.
+
+This script can be combined with a [direnv](https://direnv.net/) .envrc script in your project folder to automatically alert you if other team members have updated the secrets.
+
+Note: The script will only alert you to updates made by git users other than yourself. 
+If you are working with the same git profile on multiple computers, you will still need to remember to decrypt secrets after updating them.
+
 ### Adding a new developer
 - First, the user needs to generate a GPG key. See [GitHub's guide to doing so here](https://help.github.com/articles/generating-a-new-gpg-key/).
 - After the key is generated, have them run `bin/import_pubkey KEY_ID` to add their key to the ssm/pubkeys dir and ssm/gpg_keys
@@ -160,8 +177,7 @@ Note that offobarding a developer in this way of course does not prevent them fr
 
 In order to be 100% safe after offboarding a developer all secrets would need to be rotated. A good middle ground here is to rotate the very most sensitive ones, such as database passwords or similar.
 
-## Security suggestions
-## Suggestions for use
+## Suggestions for use / security
 ### Update secrets in a single branch
 In order to minimize conflicts, secrets should as much as possible be updated in a single git branch named as such, e.g 142-add-redis-db-password. Then the Redis db password is added and distributed to all developers in a short-turnaround pull request. This lowers the risk of conflicts, since the new secrets file will be merged into master and distributed quickly.
 
@@ -178,7 +194,7 @@ However I feel perfectly comfortable using ssm to encrypt moderately-important s
 
 In order for someone to steal the (not actually that valuable) secrets in my repositories, they would have to break either my password plus 2FA, or into Github itself, and *then* start cracking my strong GPG encryption. If someone is that motivated there are easier ways I'm sure.
 
-### Strong key passphrases
+### Strong secret key passphrases
 Make sure your team use good strong passphrases on their secret keys. This makes it hard to crack the secrets even if someone were to get a hold of the key itself. However, since the secret files will in most cases probably be lying around the hard drive of your developers, there are easier attack vectors than cracking the GPG keys for a determined attacker. 
 
 PS: We developers should always be using encrypted hard drives.
@@ -204,10 +220,9 @@ Please see [LICENSE](https://github.com/houen/ssm/blob/master/LICENSE) for licen
 ## Contributing
 Work in progress
 
-### Install specific branch
-```
-git clone --single-branch --branch BRANCH_NAME --depth 1 -q -- git@github.com:houen/ssm.git ssm
-```
-
 ## Roadmap
+- asciinema video for docs
+- Docker test harness for Linux / ZSH / Fish compatibility testing
+- Docs: Further reading: Link to computerphile videos on password / GPG
+- small info / debug print script to print debug only if LOG_LEVEL==debug. See bin/decrypt_secrets
 - Open to suggestions :-)

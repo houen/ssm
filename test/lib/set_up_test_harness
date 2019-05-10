@@ -1,0 +1,70 @@
+#!/usr/bin/env bash
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+
+# Author: Søren Houen
+# License: LGPL 3.0 https://www.gnu.org/licenses/lgpl-3.0.en.html
+source $SCRIPT_DIR/test_methods
+source $SCRIPT_DIR/gpg_key_methods
+
+# ====================================
+# SET UP TEST HARNESS
+# ====================================
+now_date=$(date '+%Y%m%d_%H%M_%S')
+SSM_SOURCE_DIR="$SCRIPT_DIR/../.."
+SSM_TEST_DIR="$SCRIPT_DIR/.."
+SSM_TEST_RUNS_DIR="$SSM_TEST_DIR/tmp/test_runs"
+TMP_TEST_DIR="$SSM_TEST_RUNS_DIR/$now_date"
+TMP_TEST_SSM_INSTALL_DIR="$TMP_TEST_DIR/ssm"
+SSM_TEST_KEY_NAME_PREFIX="_SSM__TEST_KEY__SSM_"
+SSM_TEST_KEY1_NAME="$SSM_TEST_KEY_NAME_PREFIX.test_key1"
+SSM_TEST_KEY2_NAME="$SSM_TEST_KEY_NAME_PREFIX.test_key2"
+
+require_var $TMP_TEST_DIR "TMP_TEST_DIR"
+require_var $SSM_SOURCE_DIR "SSM_SOURCE_DIR"
+require_var $SSM_TEST_KEY1_NAME "SSM_TEST_KEY1_NAME"
+require_var $SSM_TEST_KEY2_NAME "SSM_TEST_KEY2_NAME"
+
+echo "[TEST_SETUP] Setting up temporary test dir"
+rm -Rf $TMP_TEST_DIR
+mkdir -p $TMP_TEST_DIR
+
+# -------------------------
+#  Install ssm
+# -------------------------
+echo "[TEST_SETUP] Installing ssm to $TMP_TEST_DIR"
+cd $TMP_TEST_DIR
+
+### Install from git
+# current_branch=$(git rev-parse --abbrev-ref HEAD)
+# git clone --single-branch --branch $current_branch --depth 1 -q -- git@github.com:houen/ssm.git $TMP_TEST_DIR && rm -Rf $TMP_TEST_DIR/.git
+
+### Install from local
+rsync -aq --progress $SSM_SOURCE_DIR $TMP_TEST_SSM_INSTALL_DIR --exclude test/tmp --exclude .git
+
+# -------------------------
+#  Generate and install temporary gpg keys
+# -------------------------
+echo "[TEST_SETUP] Generating and installing temporary GPG keys"
+create_test_gpg_key $SSM_TEST_KEY1_NAME >/dev/null 2>&1
+create_test_gpg_key $SSM_TEST_KEY2_NAME >/dev/null 2>&1
+
+# ------------------------------------
+# Init test dir git repo
+# ------------------------------------
+echo "[TEST_SETUP] Setting up test dir git repo"
+git init >/dev/null 2>&1
+git add . >/dev/null 2>&1
+git commit -am "install ssm" >/dev/null 2>&1
+
+touch .gitignore
+echo '*.ssm.tmp' >> .gitignore
+echo '!*.ssm.gpg' >> .gitignore
+git add .gitignore >/dev/null 2>&1
+git commit -am "add ssm gitignore rules" >/dev/null 2>&1
+
+# -------------------------
+#  Setup test files
+# -------------------------
+echo "[TEST_SETUP] Creating secret test files"
+echo "Lorem ipsum dolor sit amet" > "$TMP_TEST_DIR/.secret"
+echo "Flum hoppelibof dumle!" > "$TMP_TEST_DIR/.secret2"

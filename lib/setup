@@ -4,32 +4,10 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 SSM_DIR="$SCRIPT_DIR/.."
 
 source "$SSM_DIR/lib/constants"
-
-# Require an argument be present
-function require_argument {
-  if [ -z $1 ]; then
-      echo "[ERROR] No argument given!"
-      exit 1
-  fi
-}
-
-# Require a file to be present
-function require_file_presence {
-  require_argument $1
-  if [ ! -f $1 ]; then
-    echo "[ERROR] File not found! ($1)"
-    exit 1
-  fi
-}
-
-# Import all public keys in pubkeys dir
-function import_public_keys {
-  echo "[INFO] Importing public keys from $PUBKEYS_DIR:"
-  for filename in $PUBKEYS_DIR/*.pub; do
-    [ -e "$filename" ] || continue
-    gpg -q --yes --import $filename
-  done
-}
+source "$SSM_DIR/lib/require_argument"
+source "$SSM_DIR/lib/require_file_presence"
+source "$SSM_DIR/lib/import_public_keys"
+source "$SSM_DIR/lib/get_latest_ssm_version"
 
 # -------------------------
 # Load GPG keys var

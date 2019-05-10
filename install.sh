@@ -45,9 +45,14 @@ git clone --depth   1 -q -- git@github.com:houen/ssm.git ssm && rm -Rf ssm/.git
 echo "...ok!"
 
 # ====================================
-# Have ssm encrypted files not ignored by git
+# Adapt gitignore
+# - ignore .ssm.tmp files
+# - do not ignore .ssm.gpg files
 # ====================================
 echo ""
+echo "[INFO] Marking .ssm.tmp files as ignored in .gitignore..."
+echo '*.ssm.tmp' >> .gitignore
+
 echo "[INFO] Marking .ssm.gpg files as not ignored in .gitignore..."
 # Add gitginore exception
 echo '!*.ssm.gpg' >> .gitignore

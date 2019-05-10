@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+# Require a file to be present
+function require_file_presence {
+  require_argument $1
+  if [ ! -f $1 ]; then
+    echo "[ERROR] File not found! ($1)"
+    exit 1
+  fi
+}

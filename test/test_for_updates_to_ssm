@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+source $SCRIPT_DIR/lib/set_up_test_harness
+
+# ===========================
+# TESTS HERE
+# ===========================
+
+### Test execution ###
+start_test "Check for updates to ssm"
+
+# Set version 0.0.0
+# Expect there to be a newer one available
+echo "v0.0.0" > $TMP_TEST_DIR/ssm/VERSION
+ssm/bin/check_for_ssm_update | grep "An updated version of ssm is available" || fail_test "Expected there to be an updated ssm version"
+
+# Set to current version
+latest_version=$(curl -s https://api.github.com/repos/houen/ssm/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
+echo $latest_version > $TMP_TEST_DIR/ssm/VERSION
+ssm/bin/check_for_ssm_update | grep "An updated version of ssm is available" && fail_test "Expected there not to be an updated ssm version"
+
+pass_test
+
+# ====================================
+#  Cleanup
+# ====================================
+destroy_test_env

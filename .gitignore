@@ -1,2 +1,2 @@
-test/.test_ssm
 tmp
+test/tmp/*

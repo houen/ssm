@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+# Import all public keys in pubkeys dir
+function import_public_keys {
+  echo "[DEBUG] ...importing public keys"
+  for filename in $PUBKEYS_DIR/*.pub; do
+    [ -e "$filename" ] || continue
+    gpg -q --yes --import $filename
+  done
+}

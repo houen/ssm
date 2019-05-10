@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+
+source $SCRIPT_DIR/lib/set_up_test_harness
+
+# ===========================
+# TESTS HERE
+# ===========================
+
+# -------------------------
+#  TEST: Import pubkey
+# -------------------------
+require_var $TMP_TEST_SSM_INSTALL_DIR "TMP_TEST_SSM_INSTALL_DIR"
+
+start_test "Importing test key to ssm"
+ssm/bin/import_pubkey $SSM_TEST_KEY1_NAME
+test_file_exists "$TMP_TEST_SSM_INSTALL_DIR/config/pubkeys/$SSM_TEST_KEY1_NAME.pub"
+pass_test
+
+# ====================================
+#  Cleanup
+# ====================================
+destroy_test_env

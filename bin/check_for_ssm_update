@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+SSM_DIR="$SCRIPT_DIR/.."
+# Source setup support file
+source "$SSM_DIR/lib/setup"
+
+our_version=`cat $SSM_DIR/VERSION`
+latest_release_tag=$(curl -s https://api.github.com/repos/houen/ssm/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
+
+if [[ "$latest_release_tag" != "$our_version" ]]; then
+  echo "An updated version of ssm is available ($latest_release_tag). You are on version: $our_version"
+  exit 0
+fi
+
+exit 1
