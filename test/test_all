@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+
+set -e
+
+$SCRIPT_DIR/test_add_secret_files
+$SCRIPT_DIR/test_import_pubkey
+$SCRIPT_DIR/test_encrypt_secrets
+$SCRIPT_DIR/test_decrypt_secrets
+
+# TODO:
+$SCRIPT_DIR/test_decrypt_secrets_as_other_user

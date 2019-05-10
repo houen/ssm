@@ -58,58 +58,14 @@ function test_text_in_file {
    grep -Fx "$text" $file || fail_test "Text '$text' is not in file $file"
 }
 
-function setup_test_env {
-   require_var $TMP_TEST_DIR "TMP_TEST_DIR"
-   require_var $SSM_SOURCE_DIR "SSM_SOURCE_DIR"
-   require_var $SSM_TEST_KEY1_NAME "SSM_TEST_KEY1_NAME"
-   require_var $SSM_TEST_KEY2_NAME "SSM_TEST_KEY2_NAME"
-   
-   echo "[TEST_SETUP] Setting up temporary test dir"
-   rm -Rf $TMP_TEST_DIR
-   mkdir -p $TMP_TEST_DIR
-   echo "[DONE]"
-   echo ""
-
-   # -------------------------
-   #  Install ssm
-   # -------------------------
-   echo "[TEST_SETUP] Installing ssm to $TMP_TEST_DIR"
-   cd $TMP_TEST_DIR
-
-   ### Install from git
-   # current_branch=$(git rev-parse --abbrev-ref HEAD)
-   # git clone --single-branch --branch $current_branch --depth 1 -q -- git@github.com:houen/ssm.git $TMP_TEST_DIR && rm -Rf $TMP_TEST_DIR/.git
-
-   ### Install from local
-   rsync -aq --progress $SSM_SOURCE_DIR $TMP_TEST_DIR --exclude test/.test_ssm --exclude .git
-   echo "[DONE]"
-   echo ""
-
-   # -------------------------
-   #  Generate and install temporary gpg keys
-   # -------------------------
-   echo "[TEST_SETUP] Generating and installing temporary GPG keys"
-   create_test_gpg_key $SSM_TEST_KEY1_NAME
-   create_test_gpg_key $SSM_TEST_KEY2_NAME
-   echo "[DONE]"
-   echo ""
-
-   # -------------------------
-   #  Setup test files
-   # -------------------------
-   echo "[TEST_SETUP] Creating secret test files"
-   echo "Lorem ipsum dolor sit amet" > "$TMP_TEST_DIR/.secret"
-   echo "Flum hoppelibof dumle!" > "$TMP_TEST_DIR/.secret2"
-}
-
 function destroy_test_env {
    require_var $TMP_TEST_DIR "TMP_TEST_DIR"
    require_var $SSM_TEST_KEY1_NAME "SSM_TEST_KEY1_NAME"
    require_var $SSM_TEST_KEY2_NAME "SSM_TEST_KEY2_NAME"
 
-   echo "[CLEANUP] Removing test dir TMP_TEST_DIR"
+   echo "[CLEANUP] Removing test dir ($TMP_TEST_DIR)"
    rm -Rf $TMP_TEST_DIR
    echo "[CLEANUP] Removing temporary gpg keys:"
-   delete_gpg_key $SSM_TEST_KEY1_NAME
-   delete_gpg_key $SSM_TEST_KEY2_NAME
+   delete_gpg_key $SSM_TEST_KEY1_NAME >/dev/null 2>&1
+   delete_gpg_key $SSM_TEST_KEY2_NAME >/dev/null 2>&1
 }
