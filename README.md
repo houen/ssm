@@ -36,8 +36,6 @@ A simple tool to easily and securely share secrets within a team, using [GPG](ht
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-![ssm example video](https://i.ibb.co/zPj54VP/ssm-example.gif)
-
 ## Motivation
 As a freelancer, I came across many teams where secrets management was done a bit ad-hoc. Most were using .env files. Some were using pass. Some etcd. Some teams were using full-featured solutions like Hashicorp Consul, Vault, or similar. Often you would have a .env.sample file to start with, and then you needed to get the secrets from another team member. When secrets were updated these were then sent around in more or less secure ways between teams members.
 
