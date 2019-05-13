@@ -7,6 +7,7 @@ $SCRIPT_DIR/test_add_secret_files
 $SCRIPT_DIR/test_import_pubkey
 $SCRIPT_DIR/test_encrypt_secrets
 $SCRIPT_DIR/test_decrypt_secrets
+$SCRIPT_DIR/test_check_for_secrets_to_decrypt
 
 # TODO:
 $SCRIPT_DIR/test_for_updates_to_ssm

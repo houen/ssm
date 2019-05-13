@@ -221,6 +221,7 @@ Please see [LICENSE](https://github.com/houen/ssm/blob/master/LICENSE) for licen
 Work in progress
 
 ## Roadmap
+- write about script to check for secrets to decrypt
 - asciinema video for docs
 - Docker test harness for Linux / ZSH / Fish compatibility testing
 - Docs: Further reading: Link to computerphile videos on password / GPG

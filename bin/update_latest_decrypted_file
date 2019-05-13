@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+# Get current dir (bin dir)
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+SSM_DIR="$SCRIPT_DIR/.."
+# Source setup support file
+source "$SSM_DIR/lib/setup"
+
+# For keeping track of when the newest secret was committed
+# in order for a client to know when to re-decrypt
+latest_change_ts=0
+latest_change_commit_hash=""
+
+# Decrypt files
+for file in ${SECRET_FILES_FOR_ENCRYPTION[*]}; do
+  # https://git-scm.com/docs/pretty-formats
+  enc_file_ts=$(git log -n 1 --pretty=format:%ct -- $file.ssm.gpg)
+  enc_file_commit_hash=$(git log -n 1 --pretty=format:%h -- $file.ssm.gpg)
+
+  # Check if this is the latest committed secret file
+  if [[ "$enc_file_ts" -gt "$latest_change_ts" ]]; then
+    latest_change_ts=$enc_file_ts
+    latest_change_commit_hash=$enc_file_commit_hash
+  fi
+done
+
+# Store latest decrypted commit hash to file
+echo $latest_change_commit_hash > $SSM_DIR/.latest_decrypted
