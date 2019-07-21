@@ -157,7 +157,9 @@ Note: The script will only alert you to updates made by git users other than you
 If you are working with the same git profile on multiple computers, you will still need to remember to decrypt secrets after updating them.
 
 ### Adding a new developer
-- First, the user needs to generate a GPG key. See [GitHub's guide to doing so here](https://help.github.com/articles/generating-a-new-gpg-key/).
+- First, the user needs to generate a GPG key. Use one of these commands to do so:
+  - Create a never-expiring RSA 4096 gpg key: `gpg --quick-generate-key EMAIL rsa4096 sign,auth,encr never`
+  - Create a key with full control: `gpg --full-generate-key`
 - After the key is generated, have them run `bin/import_pubkey KEY_ID` to add their key to the ssm/pubkeys dir and ssm/gpg_keys
 - Have them commit and push to git
 - Now, someone with access can pull the relevant git branch, e.g. DEV-42-onboard-soren, decrypt the secrets, run `ssm/bin/encrypt_secrets`, then push to git.
@@ -213,6 +215,29 @@ PS: We developers should always be using encrypted hard drives.
 ## FAQ
 - Can I encrypt certain files for only certain people / keys, for example .env.production?
   - This would be very useful indeed. However, I want to see if this project is useful for other people than myself before working on it.
+
+## Troubleshooting
+- I am getting a GPG error "encryption failed: unusable public key". What gives?
+  - This is most often caused by on of two things: 
+    - The key GPG is complaining about does not have encryption capability. For instance, keys created with Github's guide can only sign documents, not encrypt them. Use the `gpg --list-keys KEY_ID` command to find out if this is the case:
+    ```
+    gpg --list-keys SSM Test
+    pub   rsa4096 2018-12-22 [SC]
+          8A48BF6E81D222D7EF3C8456FB20479FE1960A37
+    uid           [ unknown] SSM test (test key for SSM) <thehouen@gmail.com>
+    sub   rsa4096 2018-12-22 [E]
+    ```
+    Here we see that my test key has subkey with the  flag [E] for encryption. Thus, my test key can perform encryption. If the [E] flag is missing, your key cannot be used to encrypt.
+
+    It *should* be possible to change this on your key, but it [requires cumbersome gpg editing](https://security.stackexchange.com/questions/31614/how-to-change-subkey-usage-of-a-pgp-key). Unless you absolutely need to use this exact key, I would recommend just creating a new one.
+
+    - An expired *key or subkey*. Use the command `gpg --list-options show-unusable-subkeys --list-keys KEY_ID` to debug it. Example:
+    ```
+    gpg --list-options show-unusable-subkeys --list-keys 449FA3AB
+    pub   1024D/449FA3AB 1999-10-05 [expired: 2001-10-04]
+    uid       [ expired] Linus Torvalds <torvalds@transmeta.com>
+    sub   2048g/BFF491C5 1999-10-05 [expired: 2001-10-04]
+    ```
 
 ## License
 Please see [LICENSE](https://github.com/houen/ssm/blob/master/LICENSE) for license details.
