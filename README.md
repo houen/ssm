@@ -160,7 +160,7 @@ If you are working with the same git profile on multiple computers, you will sti
 - First, the user needs to generate a GPG key. Use one of these commands to do so:
   - Create a never-expiring RSA 4096 gpg key: `gpg --quick-generate-key EMAIL rsa4096 sign,auth,encr never`
   - Create a key with full control: `gpg --full-generate-key`
-- After the key is generated, have them run `bin/import_pubkey KEY_ID` to add their key to the ssm/pubkeys dir and ssm/gpg_keys
+- After the key is generated, have them run `bin/import_pubkey KEY_ID` to add their key to the ssm/config/pubkeys dir and ssm/config/gpg_keys
 - Have them commit and push to git
 - Now, someone with access can pull the relevant git branch, e.g. DEV-42-onboard-soren, decrypt the secrets, run `ssm/bin/encrypt_secrets`, then push to git.
 - Now the new developer can pull the branch, run ssm/bin/decrypt_secrets, and they will have all the shared secrets.
@@ -168,8 +168,8 @@ If you are working with the same git profile on multiple computers, you will sti
 ### Offboarding a developer
 To remove a developer:
 
-- Remove their key ID from ssm/gpg_keys
-- Remove their public key from ssm/pubkeys. Secrets will no longer be encrypted with their GPG public key.
+- Remove their key ID from ssm/config/gpg_keys
+- Remove their public key from ssm/config/pubkeys. Secrets will no longer be encrypted with their GPG public key.
 - Run `ssm/bin/encrypt_secrets`
 - Commit and push
 
