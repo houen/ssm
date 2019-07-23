@@ -8,8 +8,8 @@ A simple tool to easily and securely share secrets within a team, using [GPG](ht
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
-- [Motivation](#motivation)
 - [Benefits of ssm](#benefits-of-ssm)
+- [Motivation](#motivation)
 - [Installation](#installation)
   - [Via install script](#via-install-script)
 - [Usage](#usage)
@@ -36,6 +36,14 @@ A simple tool to easily and securely share secrets within a team, using [GPG](ht
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
+## Benefits of ssm
+- No new tools, servers or systems (assuming you already have Git and gpg.)
+- It takes about one minute to add to a new project (assuming you have gpg and a key already).
+- Secrets are securely encrypted via gpg.
+- Secrets are kept in the same Git repository as the code they relate to, making configuration drift errors less likely.
+- Secrets are versioned, so if a secret is accidentally overridden, it can be recovered.
+- Offboarding is simply a matter of [removing the offboarded developer](#removing-a-developer) and reencrypting secrets.
+
 ## Motivation
 As a freelancer, I came across many teams where secrets management was done a bit ad-hoc. Most were using .env files. Some were using pass. Some etcd. Some teams were using full-featured solutions like Hashicorp Consul, Vault, or similar. Often you would have a .env.sample file to start with, and then you needed to get the secrets from another team member. When secrets were updated these were then sent around in more or less secure ways between teams members.
 
@@ -49,14 +57,6 @@ While the above are all valid choices, it seemed that often:
 - Offboarding was non-existent.
 
 I was missing an extremely simple tool that required no new infrastructure or tools, while allowing to conveniently and securely share secrets in a small company or team. So I created this.
-
-## Benefits of ssm
-- No new tools, servers or systems (assuming you already have Git and gpg.)
-- It takes about one minute to add to a new project (assuming you have gpg and a key already).
-- Secrets are securely encrypted via gpg.
-- Secrets are kept in the same Git repository as the code they relate to, making configuration drift errors less likely.
-- Secrets are versioned, so if a secret is accidentally overridden, it can be recovered.
-- Offboarding is simply a matter of [removing the offboarded developer](#removing-a-developer) and reencrypting secrets.
 
 ## Installation
 ### Via install script
