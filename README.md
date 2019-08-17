@@ -215,6 +215,13 @@ PS: We developers should always be using encrypted hard drives.
 ## FAQ
 - Can I encrypt certain files for only certain people / keys, for example .env.production?
   - This would be very useful indeed. However, I want to see if this project is useful for other people than myself before working on it.
+  
+- How does ssm differ from git-crypt?
+  - ssm does much the same as git-crypt, but in a less magical way. git-crypt works with git hooks and for the most part just works. This part of the git-crypt docs outline a danger in that:
+  ```
+  git-crypt does not work reliably with some third-party git GUIs, such as Atlassian SourceTree and GitHub for Mac. Files might be left in an unencrypted state.
+  ```
+  In contrast, ssm works fully manual, so the user retains full control. Files will never be committed or pushed in an unencrypted state, since the unencrypted version will be in your .gitignore. For me that is a benefit when dealing with secrets.
 
 ## Troubleshooting
 - I am getting a GPG error "encryption failed: unusable public key". What gives?
