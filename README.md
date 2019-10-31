@@ -231,7 +231,7 @@ PS: We developers should always be using encrypted hard drives.
     gpg --list-keys SSM Test
     pub   rsa4096 2018-12-22 [SC]
           8A48BF6E81D222D7EF3C8456FB20479FE1960A37
-    uid           [ unknown] SSM test (test key for SSM) <thehouen@gmail.com>
+    uid           [ unknown] SSM test (test key for SSM) <ssmtestkey@example.com>
     sub   rsa4096 2018-12-22 [E]
     ```
     Here we see that my test key has subkey with the  flag [E] for encryption. Thus, my test key can perform encryption. If the [E] flag is missing, your key cannot be used to encrypt.
