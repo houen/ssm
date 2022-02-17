@@ -42,7 +42,7 @@ A simple tool to easily and securely share secrets within a team, using [GPG](ht
 - Secrets are securely encrypted via gpg.
 - Secrets are kept in the same Git repository as the code they relate to, making configuration drift errors less likely.
 - Secrets are versioned, so if a secret is accidentally overridden, it can be recovered.
-- Offboarding is simply a matter of [removing the offboarded developer](#removing-a-developer) and reencrypting secrets.
+- Offboarding is simply a matter of removing the offboarded developer and reencrypting secrets.
 
 ## Motivation
 As a freelancer, I came across many teams where secrets management was done a bit ad-hoc. Most were using .env files. Some were using pass. Some etcd. Some teams were using full-featured solutions like Hashicorp Consul, Vault, or similar. Often you would have a .env.sample file to start with, and then you needed to get the secrets from another team member. When secrets were updated these were then sent around in more or less secure ways between teams members.
@@ -52,8 +52,6 @@ While the above are all valid choices, it seemed that often:
 - Onboarding new developers was made more difficult by not having a structured way of sharing secrets.
 - The adding or removing of secrets was done in a too ad-hoc way, causing confusion and weird local dev bugs. 
 - The overhead added from "proper" secrets management was more than necessary for a small team.
-- The adding or removing of secrets was done in a too ad-hoc way, causing confusion and weird local bugs. 
-- Onboarding new developers was made more difficult by not having a structured way of sharing secrets.
 - Offboarding was non-existent.
 
 I was missing an extremely simple tool that required no new infrastructure or tools, while allowing to conveniently and securely share secrets in a small company or team. So I created this.
