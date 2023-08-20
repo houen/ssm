@@ -18,7 +18,6 @@ A simple tool to easily and securely share secrets within a team, using [GPG](ht
   - [Adding a new secret file](#adding-a-new-secret-file)
   - [Updating a secret](#updating-a-secret)
   - [Pull updated secrets](#pull-updated-secrets)
-  - [Check for updated secrets to decrypt](#check-for-updated-secrets-to-decrypt)
   - [Adding a new developer](#adding-a-new-developer)
   - [Offbarding a developer](#offbarding-a-developer)
 - [Suggestions for use / security](#suggestions-for-use--security)
@@ -43,6 +42,7 @@ A simple tool to easily and securely share secrets within a team, using [GPG](ht
 - Secrets are kept in the same Git repository as the code they relate to, making configuration drift errors less likely.
 - Secrets are versioned, so if a secret is accidentally overridden, it can be recovered.
 - Offboarding is simply a matter of removing the offboarded developer and reencrypting secrets.
+- All the code is simple shell files living in your project. You can know exactly what ssm is doing just by auditing the scripts.
 
 ## Motivation
 As a freelancer, I came across many teams where secrets management was done a bit ad-hoc. Most were using .env files. Some were using pass. Some etcd. Some teams were using full-featured solutions like Hashicorp Consul, Vault, or similar. Often you would have a .env.sample file to start with, and then you needed to get the secrets from another team member. When secrets were updated these were then sent around in more or less secure ways between teams members.
@@ -139,20 +139,6 @@ Now the secrets files will be added / overridden with the new values.
 ### Pull updated secrets
 - Pull from git repository
 - Run `ssm/bin/decrypt_secrets`
-
-### Check for updated secrets to decrypt
-SSM includes a script to automatically check whether there are new/updated secrets which should be decrypted:
-
-```bash
-  ssm/bin/check_for_updated_secrets
-```
-
-If there are newer secrets than the ones currently decrypted by the user, the script will output an info message reporting this.
-
-This script can be combined with a [direnv](https://direnv.net/) .envrc script in your project folder to automatically alert you if other team members have updated the secrets.
-
-Note: The script will only alert you to updates made by git users other than yourself. 
-If you are working with the same git profile on multiple computers, you will still need to remember to decrypt secrets after updating them.
 
 ### Adding a new developer
 - First, the user needs to generate a GPG key. Use one of these commands to do so:
